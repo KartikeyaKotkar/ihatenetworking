@@ -11,7 +11,7 @@ Last updated: 2026-09-04. Scope of this update: **Phase 1 MVP COMPLETE. All 41 t
 - [x] API routes (dynamic, `force-dynamic`): `/api/dns?name=&type=` (A/AAAA/MX/CNAME/TXT/NS, 8s timeout, readable 404s), `/api/dns/reverse?ip=`, `/api/headers?url=` (SSRF-guarded, 12s abort, manual redirect), `/api/ping?host=` (system ping ICMP first, TCP-connect fallback labeled honestly), `/api/traceroute?host=&maxHops=` (traceroute→tracepath fallback, honest 501 when binaries missing).
 - [x] 12 subnetting + 9 IP-tools + 6 converters + 4 lookup/URL pages: static, client-side, unique metadata + FAQ + related.
 - [x] 7 DNS + header + ping + traceroute pages: static shells, client fetch to APIs with loading/error states.
-- [x] Homepage: search bar (client filter over `src/lib/tools.ts` index, min 2 chars, top 8, ARIA combobox/listbox), Popular tools (§15 first-10 list), 8 category cards with anchors, per-category sections, Recently added (8), privacy statement. Cisco card shows "Soon", no dead links.
+- [x] Homepage: command-palette search (`SearchPalette`: Ctrl/Cmd+K, autofocus, arrow keys + Enter, Esc, ARIA dialog/listbox), sticky sidebar (categories + counts + privacy note, `lg:` only), big cards (`p-6`, `text-base`), grey `hover:border-zinc-500` + `focus-visible:ring-zinc-500` everywhere, zero neon hover. Old inline `ToolSearch.tsx` deleted.
 - [x] Tests: subnet (12) + iptools (10) + remaining converters/ports/status (4) + homepage index/search (4) + sample. `npm test` green (31 pass).
 - [x] Typecheck + `next build` green (41 static tool pages + `/`, `/_not-found`, `/sitemap.xml` + 5 dynamic APIs).
 - [ ] Phase 2/3/4 (MAC, packet decoders, bandwidth calcs, Cisco, learning) — see `extra/didyoupingit.md` §5-7. NOT started.
@@ -111,9 +111,19 @@ IPv6 (`src/lib/ipv6.ts`, BigInt):
 - `src/components/ToolSearch.tsx`: client search, placeholder "What networking problem are you solving?", live results as links.
 - `src/app/page.tsx`: hero + search, Popular (10), category cards → anchored sections, Recently added (8), privacy (client-side vs server-side split stated honestly).
 
+## §4 Technical priorities audit (Phase 1.4)
+
+- Stack: Next.js App Router + TypeScript + Tailwind, static pages + client calcs. Done.
+- Structure deviation (deliberate): no `src/tools/` dir — calculators colocate as `src/app/<route>/calculator.tsx` (idiomatic App Router, keeps server/client boundary explicit). No `src/lib/subnetting.ts` — subnet math lives in `ipv4.ts` (single uint32 domain, no float). Lib is per-domain: `ipv4`, `ipv6`, `converters`, `ports`, `http-status`, `dns` (server-only), `tools` (index/search).
+- Separation: pure lib functions, zero UI imports. Unit tests: 40 pass (`subnet`, `iptools`, `remaining`, `homepage`, `edge`).
+- Invalid input: every page has explicit `ErrorBox` paths; API routes return 400/403/404/501/502 with human messages.
+- Edge cases: /31 (RFC 3021), /32, 0.0.0.0/0, non-contiguous masks, split cap 1024, VLSM overflow, TEST-NET + CGNAT scopes, single-zero-group IPv6 (RFC 5952).
+- Integer safety: uint32 `>>> 0` + per-octet AND + `Math.pow` sizes; IPv6 BigInt shifts. Audit found no `1 << k` address math.
+- Bugs caught by new edge tests (fixed): TEST-NET-2 matched wrong octet (`third === 51` instead of `second === 51 && third === 100`); `validHttpUrl` let `ftp://` hide behind prepended `https://` (now rejects non-HTTP schemes + uses fixed variable).
+
 ## Verification
 
-1. `npm test` — 31/31 pass (12 subnet + 10 iptools + 4 converters/ports/status + 4 homepage index + 1 sample).
+1. `npm test` — 40/40 pass (12 subnet + 10 iptools + 4 converters/ports/status + 4 homepage index + 9 edge/guards + 1 sample).
 2. `npx tsc --noEmit` — clean.
 3. `npx next build` — clean, 41 static tool pages + 5 dynamic APIs.
 4. Live `next start` smoke test: bad hostname → 400 JSON; valid DNS in sandbox → graceful 502 ("DNS server failed or timed out", sandbox blocks outbound DNS — deploy env differs); private ping target → 403 SSRF refusal. System `ping`/`traceroute` binaries present locally; ping 8.8.8.8 ICMP OK.

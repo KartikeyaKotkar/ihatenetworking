@@ -120,10 +120,12 @@ export function isNonPublicIp(ip: string): boolean {
 }
 
 export function validHttpUrl(raw: string): URL | null {
-  let s = raw.trim();
-  if (!/^https?:\/\//i.test(s)) s = "https://" + s;
+  const s = raw.trim();
+  // Reject non-HTTP schemes outright (don't let them hide behind prepended https://)
+  if (/^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//.test(s) && !/^https?:\/\//i.test(s)) return null;
+  const withScheme = /^https?:\/\//i.test(s) ? s : "https://" + s;
   try {
-    const u = new URL(s);
+    const u = new URL(withScheme);
     if (u.protocol !== "http:" && u.protocol !== "https:") return null;
     if (!validLookupName(u.hostname)) return null;
     return u;

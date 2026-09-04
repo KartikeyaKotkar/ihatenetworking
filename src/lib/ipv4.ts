@@ -397,9 +397,9 @@ export function scopeOfIPv4(ip: number): IPv4ScopeInfo {
     const third = Math.floor(v / 256) % 256;
     if (third === 113) return { scope: "reserved", private: false, label: "Documentation (203.0.113.0/24, TEST-NET-3)" };
   }
-  if (first === 198) {
+  if (first === 198 && second === 51) {
     const third = Math.floor(v / 256) % 256;
-    if (third === 51) return { scope: "reserved", private: false, label: "Documentation (198.51.100.0/24, TEST-NET-2)" };
+    if (third === 100) return { scope: "reserved", private: false, label: "Documentation (198.51.100.0/24, TEST-NET-2)" };
   }
   if (first === 192) {
     const third = Math.floor(v / 256) % 256;
