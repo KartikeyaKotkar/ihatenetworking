@@ -13,6 +13,15 @@ const TOOLS = [
   "/subnet-mask-to-cidr",
   "/network-address-calculator",
   "/broadcast-address-calculator",
+  "/ipv4-validator",
+  "/ipv4-to-binary",
+  "/binary-to-ipv4",
+  "/ip-range-calculator",
+  "/ip-range-generator",
+  "/private-ip-checker",
+  "/ipv6-subnet-calculator",
+  "/ipv6-validator",
+  "/ipv6-compression",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

@@ -22,6 +22,18 @@ const SUBNET_TOOLS = [
   { href: "/broadcast-address-calculator", title: "Broadcast Address Calculator", desc: "Last address of subnet" },
 ];
 
+const IP_TOOLS = [
+  { href: "/ipv4-validator", title: "IPv4 Address Validator", desc: "Valid or not, with reason" },
+  { href: "/ipv4-to-binary", title: "IPv4 to Binary", desc: "Dotted decimal to binary" },
+  { href: "/binary-to-ipv4", title: "Binary to IPv4", desc: "Binary back to dotted decimal" },
+  { href: "/ip-range-calculator", title: "IP Range Calculator", desc: "Count addresses between two IPs" },
+  { href: "/ip-range-generator", title: "IP Range Generator", desc: "List every IP in range" },
+  { href: "/private-ip-checker", title: "Private IP Checker", desc: "Private, CGNAT, public, scope" },
+  { href: "/ipv6-subnet-calculator", title: "IPv6 Subnet Calculator", desc: "Network + last address + total" },
+  { href: "/ipv6-validator", title: "IPv6 Address Validator", desc: "Valid or not, expanded form" },
+  { href: "/ipv6-compression", title: "IPv6 Compression & Expansion", desc: "Shortest vs full form, RFC 5952" },
+];
+
 export default function Home() {
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-4xl flex-col items-center px-5 py-14 text-center">
@@ -33,9 +45,23 @@ export default function Home() {
       </header>
 
       <main className="mt-10 w-full text-left">
-        <h2 className="text-xs font-semibold uppercase tracking-wider text-gray-500">Subnetting — 12 tools live</h2>
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-gray-500">Subnetting — 12 tools</h2>
         <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
           {SUBNET_TOOLS.map((t) => (
+            <Link
+              key={t.href}
+              href={t.href}
+              className="glass-panel rounded-lg p-4 transition-colors hover:border-[var(--color-neon-cyan)]"
+            >
+              <h3 className="text-sm font-semibold text-gray-100">{t.title}</h3>
+              <p className="mt-1 text-xs text-gray-400">{t.desc}</p>
+            </Link>
+          ))}
+        </div>
+
+        <h2 className="mt-8 text-xs font-semibold uppercase tracking-wider text-gray-500">IP Tools — 9 tools</h2>
+        <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+          {IP_TOOLS.map((t) => (
             <Link
               key={t.href}
               href={t.href}
@@ -56,7 +82,7 @@ export default function Home() {
       </main>
 
       <footer className="mt-10 text-xs text-gray-600">
-        <p>Phase 1 MVP: Subnetting only. IP tools, DNS, utilities ship next.</p>
+        <p>Phase 1 MVP: Subnetting + IP tools live (21 tools). DNS, utilities, converters ship next.</p>
       </footer>
     </div>
   );

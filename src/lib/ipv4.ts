@@ -294,3 +294,142 @@ function toOctets(n: number): [number, number, number, number] {
     v % 256,
   ];
 }
+
+// ---------- IP Tools additions (Phase 1b) ----------
+
+export interface IPv4Validation {
+  valid: boolean;
+  reason: string;
+  value: number | null;
+}
+
+/** Strict validation with human-readable reason for first failure. */
+export function validateIPv4Detailed(input: string): IPv4Validation {
+  if (typeof input !== "string" || input.trim().length === 0)
+    return { valid: false, reason: "Empty input. Enter 4 octets like 192.168.1.1.", value: null };
+  const s = input.trim();
+  const parts = s.split(".");
+  if (parts.length !== 4)
+    return { valid: false, reason: `Expected 4 octets, got ${parts.length}. Use format A.B.C.D.`, value: null };
+  for (let i = 0; i < 4; i++) {
+    const part = parts[i];
+    if (part.length === 0) return { valid: false, reason: `Octet ${i + 1} is empty.`, value: null };
+    if (!/^\d+$/.test(part))
+      return { valid: false, reason: `Octet ${i + 1} ("${part}") is not numeric.`, value: null };
+    if (part.length > 3)
+      return { valid: false, reason: `Octet ${i + 1} ("${part}") too long. Max 3 digits.`, value: null };
+    const n = Number(part);
+    if (!Number.isInteger(n) || n < 0 || n > 255)
+      return { valid: false, reason: `Octet ${i + 1} (${n}) out of range 0-255.`, value: null };
+  }
+  return { valid: true, reason: "Valid IPv4 address.", value: parseIPv4(s) };
+}
+
+/** Dotted binary "11000000.10101000..." for an IPv4 string. Null on invalid. */
+export function ipv4StringToBinary(ipStr: string): string | null {
+  const n = parseIPv4(ipStr);
+  if (n === null) return null;
+  return ipv4ToBinaryGrouped(n);
+}
+
+/** Parse dotted binary or plain 32-bit binary to dotted decimal. Null on invalid. */
+export function binaryToIPv4String(input: string): string | null {
+  if (typeof input !== "string") return null;
+  const s = input.trim().replace(/\s+/g, "");
+  if (s.length === 0) return null;
+  let bits: string;
+  if (s.includes(".")) {
+    const parts = s.split(".");
+    if (parts.length !== 4) return null;
+    for (const p of parts) {
+      if (p.length !== 8 || !/^[01]{8}$/.test(p)) return null;
+    }
+    bits = parts.join("");
+  } else {
+    if (!/^[01]{32}$/.test(s)) return null;
+    bits = s;
+  }
+  let n = 0;
+  for (let i = 0; i < 4; i++) {
+    const octet = parseInt(bits.slice(i * 8, i * 8 + 8), 2);
+    n = n * 256 + octet;
+  }
+  return ipv4ToString(n >>> 0);
+}
+
+export type IPv4Scope =
+  | "private"
+  | "loopback"
+  | "link-local"
+  | "carrier-grade-nat"
+  | "multicast"
+  | "broadcast"
+  | "reserved"
+  | "public";
+
+export interface IPv4ScopeInfo {
+  scope: IPv4Scope;
+  private: boolean;
+  label: string;
+}
+
+/** Classify scope of a parsed address. Ordering matters: specific ranges first. */
+export function scopeOfIPv4(ip: number): IPv4ScopeInfo {
+  const v = ip >>> 0;
+  const first = Math.floor(v / 16777216);
+  const second = Math.floor(v / 65536) % 256;
+  if (v === 0xffffffff) return { scope: "broadcast", private: false, label: "Limited broadcast (255.255.255.255)" };
+  if (first === 10) return { scope: "private", private: true, label: "Private (10.0.0.0/8, RFC 1918)" };
+  if (first === 172 && second >= 16 && second <= 31)
+    return { scope: "private", private: true, label: "Private (172.16.0.0/12, RFC 1918)" };
+  if (first === 192 && second === 168)
+    return { scope: "private", private: true, label: "Private (192.168.0.0/16, RFC 1918)" };
+  if (first === 127) return { scope: "loopback", private: true, label: "Loopback (127.0.0.0/8)" };
+  if (first === 169 && second === 254)
+    return { scope: "link-local", private: true, label: "Link-local (169.254.0.0/16, APIPA)" };
+  if (first === 100 && second >= 64 && second <= 127)
+    return { scope: "carrier-grade-nat", private: false, label: "Shared CGNAT space (100.64.0.0/10, not RFC 1918 private)" };
+  if (first >= 224 && first <= 239) return { scope: "multicast", private: false, label: "Multicast (224.0.0.0/4)" };
+  if (first >= 240) return { scope: "reserved", private: false, label: "Reserved (240.0.0.0/4)" };
+  if (first === 0) return { scope: "reserved", private: false, label: "Reserved (0.0.0.0/8, this network)" };
+  if (first === 192 && second === 0) return { scope: "reserved", private: false, label: "Reserved (192.0.0.0/24, IETF protocol)" };
+  if (first === 203 && second === 0) {
+    const third = Math.floor(v / 256) % 256;
+    if (third === 113) return { scope: "reserved", private: false, label: "Documentation (203.0.113.0/24, TEST-NET-3)" };
+  }
+  if (first === 198) {
+    const third = Math.floor(v / 256) % 256;
+    if (third === 51) return { scope: "reserved", private: false, label: "Documentation (198.51.100.0/24, TEST-NET-2)" };
+  }
+  if (first === 192) {
+    const third = Math.floor(v / 256) % 256;
+    if (second === 0 && third === 2) return { scope: "reserved", private: false, label: "Documentation (192.0.2.0/24, TEST-NET-1)" };
+  }
+  return { scope: "public", private: false, label: "Public (globally routable)" };
+}
+
+export interface IPRangeInfo {
+  start: string;
+  end: string;
+  count: number;
+}
+
+/** Validate start/end range. Count capped at 2^32; caller caps generation separately. */
+export function describeIPRange(startStr: string, endStr: string): IPRangeInfo | null {
+  const a = parseIPv4(startStr);
+  const b = parseIPv4(endStr);
+  if (a === null || b === null) return null;
+  if ((b >>> 0) < (a >>> 0)) return null;
+  return { start: ipv4ToString(a), end: ipv4ToString(b), count: (b >>> 0) - (a >>> 0) + 1 };
+}
+
+/** Generate addresses in range. Null on invalid, reversed, or over limit (default 256). */
+export function generateIPRange(startStr: string, endStr: string, limit = 256): string[] | null {
+  const info = describeIPRange(startStr, endStr);
+  if (!info) return null;
+  if (info.count > limit) return null;
+  const out: string[] = [];
+  const a = parseIPv4(startStr)! >>> 0;
+  for (let i = 0; i < info.count; i++) out.push(ipv4ToString((a + i) >>> 0));
+  return out;
+}

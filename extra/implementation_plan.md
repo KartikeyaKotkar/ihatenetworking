@@ -1,16 +1,19 @@
 # "Did You Ping It" — Implementation Plan (living doc)
 
-Last updated: 2026-09-04. Scope of this update: **Phase 1 MVP, Subnetting only (12/12 tools shipped)**.
+Last updated: 2026-09-04. Scope of this update: **Phase 1 MVP, Subnetting (12/12) + IP Tools (9/9) shipped. 21 tools live.**
 
 ## Status
 
 - [x] Framework: Next.js 16.3.3 App Router + TypeScript + Tailwind 4, `src/` layout. Dark muted theme, glass panels.
-- [x] Core lib: `src/lib/ipv4.ts` — pure integer-safe IPv4/subnet math, no float tricks.
-- [x] Shared UI: `src/components/ToolShell.tsx` (title, input/result slot, explanation, example, FAQ, related, JSON-LD) + `src/components/tool-ui.tsx` (`CopyButton`, `ResultRow`, `ErrorBox`, input classes).
-- [x] 12 subnetting routes live, all static, all client-side calc, each with unique metadata + FAQ + related links.
-- [x] Tests: `tests/subnet.test.ts` (12 tests) + sample. `npm test` green.
-- [x] Typecheck + `next build` green (17 static pages incl. `/`, `/_not-found`, `/sitemap.xml`).
-- [ ] Next phases (NOT started): IP tools (#13-21), DNS/lookups (#22-30), utilities (#31-35), converters (#36-41). See `extra/didyoupingit.md` §2.
+- [x] Core lib IPv4: `src/lib/ipv4.ts` — integer-safe subnet math + IP-tools helpers (validation with reasons, binary converters, scope classifier, range describe/generate).
+- [x] Core lib IPv6: `src/lib/ipv6.ts` — BigInt-based parse/expand/compress (RFC 5952) + subnet calc + CIDR parse. tsconfig target bumped ES2017 → ES2020 for BigInt literals (also cleared stale `tsconfig.tsbuildinfo` once).
+- [x] Shared UI: `src/components/ToolShell.tsx` + `src/components/tool-ui.tsx` (`CopyButton`, `ResultRow`, `ErrorBox`, input classes).
+- [x] 12 subnetting routes live, all static, client-side, unique metadata + FAQ + related links.
+- [x] 9 IP-tools routes live, same pattern (pages built via parallel subagents, verified by read-back + tsc + build).
+- [x] Homepage lists Subnetting (12) + IP Tools (9). Sitemap covers `/` + 21 tools.
+- [x] Tests: `tests/subnet.test.ts` (12) + `tests/iptools.test.ts` (10) + sample. `npm test` green (23 pass).
+- [x] Typecheck + `next build` green (26 static pages incl. `/`, `/_not-found`, `/sitemap.xml`).
+- [ ] NOT started: DNS/lookups (#22-30), utilities (#31-35), converters (#36-41). See `extra/didyoupingit.md` §2.
 
 ## Routes (Phase 1 Subnetting)
 
@@ -29,7 +32,21 @@ Last updated: 2026-09-04. Scope of this update: **Phase 1 MVP, Subnetting only (
 | 11 | Network Address Calculator | `/network-address-calculator` |
 | 12 | Broadcast Address Calculator | `/broadcast-address-calculator` |
 
-Homepage (`/`) lists all 12. Sitemap at `src/app/sitemap.ts` covers `/` + 12 tools (base `https://didyoupingit.com` — change before launch).
+Homepage (`/`) lists all 21. Sitemap at `src/app/sitemap.ts` covers `/` + 21 tools (base `https://didyoupingit.com` — change before launch).
+
+## Routes (Phase 1 IP Tools)
+
+| # | Tool | Route |
+|---|------|-------|
+| 13 | IPv4 Address Validator | `/ipv4-validator` |
+| 14 | IPv4 to Binary | `/ipv4-to-binary` |
+| 15 | Binary to IPv4 | `/binary-to-ipv4` |
+| 16 | IP Range Calculator | `/ip-range-calculator` |
+| 17 | IP Range Generator | `/ip-range-generator` |
+| 18 | Private IP Checker | `/private-ip-checker` |
+| 19 | IPv6 Subnet Calculator | `/ipv6-subnet-calculator` |
+| 20 | IPv6 Address Validator | `/ipv6-validator` |
+| 21 | IPv6 Compression & Expansion | `/ipv6-compression` |
 
 ## Core lib API (`src/lib/ipv4.ts`)
 
@@ -43,6 +60,19 @@ Homepage (`/`) lists all 12. Sitemap at `src/app/sitemap.ts` covers `/` + 12 too
 
 Conventions: addresses as unsigned 32-bit ints (`>>> 0`); per-octet AND to dodge signed-bitwise traps; `Math.pow(2, k)` for sizes, never `1 << k` for k≥31.
 
+## IP-tools lib API additions
+
+IPv4 (`src/lib/ipv4.ts`):
+- `validateIPv4Detailed(s) → {valid, reason, value}` — first-failure reason per octet.
+- `ipv4StringToBinary(s) → dotted binary | null`, `binaryToIPv4String(s)` — accepts dotted or plain 32-bit.
+- `scopeOfIPv4(int) → {scope, private, label}` — private (RFC 1918 ×3), loopback, link-local, carrier-grade-nat (100.64/10, NOT private), multicast, broadcast, reserved (0/8, 192.0.0/24, TEST-NET-1/2/3), public.
+- `describeIPRange(a, b)` — null if invalid/reversed; `generateIPRange(a, b, limit=256)` — null over limit.
+
+IPv6 (`src/lib/ipv6.ts`, BigInt):
+- `parseIPv6(s) → bigint | null` — single `::`, 8-group check, embedded IPv4 tail supported.
+- `expandIPv6(b)` full lowercase, `compressIPv6(b)` RFC 5952 (longest run ≥2, first on tie, no single-group shrink).
+- `describeIPv6Subnet(ip, p)` — network, last, total `2^(128-p)` as bigint; `parseIPv6CIDR`, `parseIPv6Prefix`, `isValidIPv6`.
+
 ## Page pattern (follow for future tools)
 
 - `src/app/<route>/page.tsx` — Server Component, static `metadata` (unique title+description), renders `<ToolShell>` + `<Calculator/>`.
@@ -51,10 +81,10 @@ Conventions: addresses as unsigned 32-bit ints (`>>> 0`); per-octet AND to dodge
 
 ## Verification
 
-1. `npm test` — 13/13 pass (12 subnet + 1 sample).
-2. `npx tsc --noEmit` — clean.
-3. `npx next build` — clean, 17 static routes.
-4. Manual spot checks: `192.168.1.10/24` full info; `/24→/26` split = 4 blocks; VLSM `[100,50,10]` in `/24` → `/25,/26,/28`; `255.0.255.0` rejected as non-contiguous.
+1. `npm test` — 23/23 pass (12 subnet + 10 iptools + 1 sample).
+2. `npx tsc --noEmit` — clean (after ES2020 bump; stale tsbuildinfo deleted once).
+3. `npx next build` — clean, 26 static routes.
+4. Manual spot checks: `192.168.1.10/24` full info; `/24→/26` split = 4 blocks; VLSM `[100,50,10]` in `/24` → `/25,/26,/28`; `255.0.255.0` rejected as non-contiguous; `2001:db8::1/64` → network `2001:db8::`, last `2001:db8::ffff:ffff:ffff:ffff`; `::ffff:192.0.2.1` valid; single-zero-group `2001:db8:0:1:1:1:1:1` not shrunk.
 
 ## Known limits / next fixes
 
