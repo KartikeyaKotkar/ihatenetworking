@@ -15,6 +15,7 @@ export type CategoryId =
   | "ports-protocols"
   | "network-testing"
   | "calculators"
+  | "packet-analysis"
   | "converters"
   | "cisco";
 
@@ -31,8 +32,9 @@ export const CATEGORIES: Category[] = [
   { id: "ports-protocols", label: "Ports & Protocols", blurb: "Look up ports, services, and HTTP status codes." },
   { id: "network-testing", label: "Network Testing", blurb: "Ping, trace, and inspect live HTTP responses." },
   { id: "calculators", label: "Calculators", blurb: "Host counts, masks, and ranges at a glance." },
+  { id: "packet-analysis", label: "Packet Analysis", blurb: "Decode headers byte by byte." },
   { id: "converters", label: "Converters", blurb: "Hex, decimal, and binary both ways, any size." },
-  { id: "cisco", label: "Cisco", blurb: "Student and engineer toolkit. Coming in Phase 3." },
+  { id: "cisco", label: "Cisco", blurb: "Student and engineer toolkit: IOS commands, ACLs, VLANs, OSPF, EIGRP, STP." },
 ];
 
 export const TOOLS: ToolEntry[] = [
@@ -83,7 +85,44 @@ export const TOOLS: ToolEntry[] = [
   { href: "/decimal-to-binary", title: "Decimal to Binary", desc: "255 to 11111111", category: "converters", keywords: "decimal binary base convert", },
   { href: "/binary-to-decimal", title: "Binary to Decimal", desc: "11111111 to 255", category: "converters", keywords: "binary decimal base convert", },
   { href: "/hex-to-decimal", title: "Hex to Decimal", desc: "FF to 255", category: "converters", keywords: "hex decimal base convert", },
-  { href: "/decimal-to-hex", title: "Decimal to Hex", desc: "255 to FF", category: "converters", keywords: "decimal hex base convert", },
+  { href: "/decimal-to-hex",
+  title: "Decimal to Hex",
+  desc: "255 to FF",
+  category: "converters",
+  keywords: "decimal hex base convert" },
+  // Phase 2: IP/DNS intel
+  { href: "/mac-address-formatter", title: "MAC Address Formatter", desc: "All notations + unicast/OUI info", category: "ip-addressing", keywords: "mac formatter colon hyphen cisco oui", recent: true },
+  { href: "/mac-address-validator", title: "MAC Address Validator", desc: "Valid or not, with reason", category: "ip-addressing", keywords: "mac validate check address" },
+  { href: "/dns-propagation-checker", title: "DNS Propagation Checker", desc: "A records across 4 resolvers", category: "dns", keywords: "dns propagation resolver google cloudflare ttl", recent: true },
+  { href: "/ip-geolocation-lookup", title: "IP Geolocation Lookup", desc: "City, ISP, coords + disclaimer", category: "ip-addressing", keywords: "geolocation geo city country isp location", recent: true },
+  { href: "/asn-lookup", title: "ASN Lookup", desc: "Origin AS + prefix via Cymru", category: "ip-addressing", keywords: "asn autonomous system cymru origin", recent: true },
+  { href: "/bgp-prefix-lookup", title: "BGP Prefix Lookup", desc: "Announcing prefix + origin AS", category: "ip-addressing", keywords: "bgp prefix announce route origin", recent: true },
+  { href: "/whois-lookup", title: "WHOIS Lookup", desc: "Registration + referral follow", category: "dns", keywords: "whois domain registration owner", recent: true },
+  // Phase 2: packet analysis
+  { href: "/ipv4-header-decoder", title: "IPv4 Header Decoder", desc: "Every field from hex", category: "packet-analysis", keywords: "ipv4 header decode ttl protocol", recent: true },
+  { href: "/tcp-header-decoder", title: "TCP Header Decoder", desc: "Ports, seq, flags, window", category: "packet-analysis", keywords: "tcp header decode flags syn ack" },
+  { href: "/udp-header-decoder", title: "UDP Header Decoder", desc: "Ports, length, checksum", category: "packet-analysis", keywords: "udp header decode datagram" },
+  { href: "/icmp-type-code-lookup", title: "ICMP Type/Code Lookup", desc: "Echo, unreachable, TTL expired", category: "ports-protocols", keywords: "icmp type code ping echo unreachable" },
+  { href: "/ethernet-frame-decoder", title: "Ethernet Frame Decoder", desc: "MACs + EtherType + payload", category: "packet-analysis", keywords: "ethernet frame mac ethertype decode" },
+  // Phase 2: network calculators
+  { href: "/bandwidth-calculator", title: "Bandwidth Calculator", desc: "Users x rate + overhead", category: "calculators", keywords: "bandwidth capacity users rate", recent: true },
+  { href: "/throughput-calculator", title: "Throughput Calculator", desc: "Goodput from bytes + time", category: "calculators", keywords: "throughput goodput speed" },
+  { href: "/latency-calculator", title: "Latency Calculator", desc: "Propagation + transmission", category: "calculators", keywords: "latency delay propagation rtt" },
+  { href: "/transfer-time-calculator", title: "Transfer Time Calculator", desc: "File size / rate + overhead", category: "calculators", keywords: "transfer time download file" },
+  { href: "/mtu-calculator", title: "MTU Calculator", desc: "Effective MTU after tunnels", category: "calculators", keywords: "mtu pppoe vxlan gre ipsec overhead" },
+  { href: "/mss-calculator", title: "MSS Calculator", desc: "MTU minus headers", category: "calculators", keywords: "mss segment tcp headers" },
+  { href: "/tcp-window-size-calculator", title: "TCP Window Size Calculator", desc: "BDP + scaling warning", category: "calculators", keywords: "tcp window bdp scaling bandwidth delay" },
+  // Phase 3: Cisco / student
+  { href: "/cisco-wildcard-mask-calculator", title: "Cisco Wildcard Mask Calculator", desc: "Wildcard + network statement", category: "cisco", keywords: "cisco wildcard acl ospf network", recent: true },
+  { href: "/cisco-acl-generator", title: "Cisco ACL Generator", desc: "Extended ACL lines + deny note", category: "cisco", keywords: "cisco acl access list permit deny", recent: true },
+  { href: "/cisco-vlan-calculator", title: "Cisco VLAN Calculator", desc: "ID class + vlan snippet", category: "cisco", keywords: "cisco vlan id extended vtp", recent: true },
+  { href: "/cisco-subnet-calculator", title: "Cisco Subnet Calculator", desc: "Mask + IOS commands", category: "cisco", keywords: "cisco subnet ip address command", },
+  { href: "/cisco-port-range-generator", title: "Cisco Port Range Generator", desc: "interface range command", category: "cisco", keywords: "cisco interface range ports", },
+  { href: "/cisco-ip-calculator", title: "Cisco IP Calculator", desc: "Class + default mask", category: "cisco", keywords: "cisco ip class classful", },
+  { href: "/cisco-config-generator", title: "Cisco Config Generator", desc: "Hostname + interfaces + route", category: "cisco", keywords: "cisco config hostname interface route", recent: true },
+  { href: "/ospf-cost-calculator", title: "OSPF Cost Calculator", desc: "10^8 / bandwidth, min 1", category: "cisco", keywords: "ospf cost reference bandwidth", recent: true },
+  { href: "/eigrp-metric-calculator", title: "EIGRP Metric Calculator", desc: "Classic composite + K note", category: "cisco", keywords: "eigrp metric k values composite", },
+  { href: "/stp-root-bridge-calculator", title: "STP Root Bridge Calculator", desc: "Priority + VLAN + MAC vote", category: "cisco", keywords: "stp root bridge priority vlan election", },
 ];
 
 export const CALCULATOR_HREFS = [
@@ -93,11 +132,13 @@ export const CALCULATOR_HREFS = [
   "/usable-host-calculator",
   "/subnet-mask-calculator",
   "/ip-range-calculator",
+  "/bandwidth-calculator",
+  "/transfer-time-calculator",
+  "/latency-calculator",
 ];
 
 export function toolsByCategory(id: CategoryId): ToolEntry[] {
   if (id === "calculators") return CALCULATOR_HREFS.map((h) => TOOLS.find((t) => t.href === h)!).filter(Boolean);
-  if (id === "cisco") return [];
   return TOOLS.filter((t) => t.category === id);
 }
 

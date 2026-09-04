@@ -1,6 +1,6 @@
 # "Did You Ping It" — Implementation Plan (living doc)
 
-Last updated: 2026-09-04. Scope of this update: **Phase 1 MVP COMPLETE. All 41 tools live (12 subnetting + 9 IP tools + 9 lookups + 5 utilities + 6 converters).**
+Last updated: 2026-09-04. Scope of this update: **Phase 3 COMPLETE. 70 tools live (60 + 10 Cisco/student).**
 
 ## Status
 
@@ -12,9 +12,28 @@ Last updated: 2026-09-04. Scope of this update: **Phase 1 MVP COMPLETE. All 41 t
 - [x] 12 subnetting + 9 IP-tools + 6 converters + 4 lookup/URL pages: static, client-side, unique metadata + FAQ + related.
 - [x] 7 DNS + header + ping + traceroute pages: static shells, client fetch to APIs with loading/error states.
 - [x] Homepage: command-palette search (`SearchPalette`: Ctrl/Cmd+K, autofocus, arrow keys + Enter, Esc, ARIA dialog/listbox), sticky sidebar (categories + counts + privacy note, `lg:` only), big cards (`p-6`, `text-base`), grey `hover:border-zinc-500` + `focus-visible:ring-zinc-500` everywhere, zero neon hover. Old inline `ToolSearch.tsx` deleted.
+- [x] Dev LAN access: `allowedDevOrigins: ["192.168.1.158"]` in `next.config.ts`. Without it, cross-origin dev assets 403 silently → pages SSR-render but calculators never hydrate (inputs dead). Verified cross-origin chunk 200, zero blocked warnings. If machine IP changes, add it and restart dev.
 - [x] Tests: subnet (12) + iptools (10) + remaining converters/ports/status (4) + homepage index/search (4) + sample. `npm test` green (31 pass).
 - [x] Typecheck + `next build` green (41 static tool pages + `/`, `/_not-found`, `/sitemap.xml` + 5 dynamic APIs).
 - [ ] Phase 2/3/4 (MAC, packet decoders, bandwidth calcs, Cisco, learning) — see `extra/didyoupingit.md` §5-7. NOT started.
+
+## Phase 2 — Traffic Expansion (done, 19 tools)
+
+- Libs: `src/lib/mac.ts` (all notations, unicast/multicast, universal/local, OUI), `src/lib/packets.ts` (IPv4/TCP/UDP/Ethernet decoders + ICMP dataset), `src/lib/netcalc.ts` (unit parser + 7 planning calcs), `src/lib/intel.ts` (**server-only**: Cymru ASN/BGP via DNS, WHOIS TCP/43 with referral, multi-resolver propagation, ip-api.com geo).
+- APIs (dynamic): `/api/asn`, `/api/bgp` (both Cymru `origin.asn`), `/api/whois`, `/api/propagation` (Google/Cloudflare/Quad9/OpenDNS parallel + `agreed` flag), `/api/geo`.
+- Pages: 7 client (2 MAC + 4 header decoders + ICMP) + 7 calculators + 5 intel, built via 3 parallel subagents, read-back verified.
+- Homepage: new `packet-analysis` category; calculators cross-link section extended; `recent` now `slice(-8)` (newest); counts 41 → 60.
+- Tests: `tests/phase2.test.ts` (6: mac, packets, netcalc). Test-caught fixes: netcalc unit table lacked `Mb/Gb/Kb` keys; my hand-made TCP/IPv4 vectors were malformed (fixed vectors, lib correct).
+- Intel.ts fix: `dns.Resolver` has no `setTimeout` — replaced with `withTimeout` race.
+- Live verified: `/api/asn?ip=8.8.8.8` → AS15169/8.8.8.0/24; `/api/geo` → Ashburn + Google; `/api/whois` → IANA reply. Propagation direct-UDP blocked in sandbox (per-resolver timeouts, graceful `agreed:false`); works where port 53 egress open.
+- `npm test` 46/46 green. `tsc` clean. `next build` 65 static pages.
+
+## Phase 3 — Cisco / student (done, 10 tools)
+
+- Lib: `src/lib/cisco.ts` (wildcard + IOS statements, ACL builder with `parseAclAddr`, VLAN kinds, IOS subnet/IP, interface range, config generator, OSPF cost, classic EIGRP, STP election).
+- Pages: 5 + 5 via 2 parallel subagents. All client-side, educational explanations per game plan §6.
+- Homepage: Cisco section live (was "Soon"), blurb updated, counts 60 → 70. `recent` tail now shows Cisco tools.
+- Tests: `tests/phase3.test.ts` (5). `npm test` 51/51 green. Build clean, `/ospf-cost-calculator` + `#category-cisco` smoke-checked on dev.
 
 ## Routes (Phase 1 Subnetting)
 

@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 const popular = TOOLS.filter((t) => t.popular);
-const recent = TOOLS.filter((t) => t.recent).slice(0, 8);
+const recent = TOOLS.filter((t) => t.recent).slice(-8);
 
 const cardCls =
   "glass-panel rounded-xl p-6 transition-colors hover:border-zinc-500 hover:bg-white/[0.07] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500";
@@ -22,9 +22,9 @@ export default function Home() {
         <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-gray-600">
           Free · No signup · Private
         </p>
-        <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">did you ping it</h1>
+        <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">did you ping it?</h1>
         <p className="max-w-2xl text-sm text-gray-400 sm:text-base">
-          Small networking tasks, solved instantly. 41 tools for subnets, DNS, testing, and conversion.
+          Small networking tasks, solved instantly. 70 tools for subnets, DNS, packets, Cisco, testing, and conversion.
         </p>
         <div className="w-full max-w-2xl">
           <HomeSearch />
@@ -68,7 +68,7 @@ export default function Home() {
                     >
                       {c.label}
                       <span className="ml-2 font-mono text-[10px] text-gray-600">
-                        {c.id === "cisco" ? "soon" : n}
+                        {c.id === "cisco" ? `${n} new` : n}
                       </span>
                     </a>
                   </li>
@@ -108,7 +108,7 @@ export default function Home() {
             </div>
           </section>
 
-          {CATEGORIES.filter((c) => c.id !== "cisco").map((c) => (
+          {CATEGORIES.map((c) => (
             <section key={c.id} id={`category-${c.id}`} className="mt-12 scroll-mt-6">
               <div className="flex items-baseline justify-between gap-3">
                 <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-400">
@@ -151,7 +151,7 @@ export default function Home() {
       </div>
 
       <footer className="mt-14 text-center text-xs text-gray-600">
-        <p>Phase 1 MVP complete: 41 tools live. No account, no tracking inputs.</p>
+        <p>Phase 1 MVP + Phase 2 + Phase 3 complete: 70 tools live. No account, no tracking inputs.</p>
       </footer>
     </div>
   );
