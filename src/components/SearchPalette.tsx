@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { TOOLS, categoryLabel, popularTools, searchTools } from "@/lib/tools";
+import { Badge } from "@/components/ui/badge";
 
 export function SearchButton({ onOpen }: { onOpen: () => void }) {
   return (
@@ -79,7 +80,7 @@ export default function SearchPalette({ open, onClose }: { open: boolean; onClos
         role="dialog"
         aria-modal="true"
         aria-label="Search tools"
-        className="glass-panel w-full max-w-xl overflow-hidden rounded-2xl shadow-2xl shadow-black"
+        className="w-full max-w-xl overflow-hidden rounded-2xl border border-border bg-popover shadow-2xl shadow-black"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center gap-3 border-b border-white/10 px-5 py-4">
@@ -124,9 +125,9 @@ export default function SearchPalette({ open, onClose }: { open: boolean; onClos
                   <span className="block text-sm font-medium text-gray-100">{t.title}</span>
                   <span className="block text-xs text-gray-500">{t.desc}</span>
                 </span>
-                <span className="shrink-0 rounded border border-[var(--panel-border)] bg-white/5 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-gray-500">
+                <Badge className="shrink-0">
                   {categoryLabel(t.category)}
-                </span>
+                </Badge>
               </button>
             </li>
           ))}

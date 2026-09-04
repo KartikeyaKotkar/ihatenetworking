@@ -47,6 +47,13 @@ Last updated: 2026-09-04. Scope of this update: **Phase 4 COMPLETE. 85 tools liv
 
 ## §9 UX rules (done)
 
+## shadcn migration (done)
+
+- shadcn is components-on-Tailwind, not a Tailwind replacement. Tailwind v4 stays as engine.
+- Added: `clsx` + `tailwind-merge` + `class-variance-authority` + radix slot/label, `src/lib/utils.ts` `cn()`, `components.json` (new-york, zinc), `src/components/ui/` (button, input, card, label, badge), zinc dark tokens in `globals.css`.
+- Migrated shared layer with zero per-page edits: `CopyButton` → `Button`, related links → `Button asChild`, `ToolShell` panels → `Card`, homepage cards/sidebar/recent → `Card`/`Button`/`Badge`, palette tags → `Badge`. `inputCls`/`labelCls` string API unchanged (token-backed).
+- 58/58 tests green, tsc clean, build zero errors, homepage + tool page smoke-checked.
+
 - Do: input-first layout, live `useMemo` results, `usePersistentState` (localStorage, SSR-safe effect hydration) wired into top-10 popular calculators, copy + reset everywhere, specific `ErrorBox` messages, explanations + examples + FAQs per page.
 - Don't: no signup, no gating, no popups, single-page tools, all-local processing except DNS/ping/traceroute/headers/geo/whois APIs.
 - Monochrome: bulk sweep removed all neon/emerald/cyan/amber classes (38 files) + dead CSS vars; hovers/focus/rings/badges/buttons all zinc. Only red remains for error states (`ErrorBox`, wrong quiz picks). ToolShell example bumped to `text-sm zinc-200` for readability.
