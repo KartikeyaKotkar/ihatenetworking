@@ -1,19 +1,20 @@
 # "Did You Ping It" — Implementation Plan (living doc)
 
-Last updated: 2026-09-04. Scope of this update: **Phase 1 MVP, Subnetting (12/12) + IP Tools (9/9) shipped. 21 tools live.**
+Last updated: 2026-09-04. Scope of this update: **Phase 1 MVP COMPLETE. All 41 tools live (12 subnetting + 9 IP tools + 9 lookups + 5 utilities + 6 converters).**
 
 ## Status
 
 - [x] Framework: Next.js 16.3.3 App Router + TypeScript + Tailwind 4, `src/` layout. Dark muted theme, glass panels.
 - [x] Core lib IPv4: `src/lib/ipv4.ts` — integer-safe subnet math + IP-tools helpers (validation with reasons, binary converters, scope classifier, range describe/generate).
-- [x] Core lib IPv6: `src/lib/ipv6.ts` — BigInt-based parse/expand/compress (RFC 5952) + subnet calc + CIDR parse. tsconfig target bumped ES2017 → ES2020 for BigInt literals (also cleared stale `tsconfig.tsbuildinfo` once).
-- [x] Shared UI: `src/components/ToolShell.tsx` + `src/components/tool-ui.tsx` (`CopyButton`, `ResultRow`, `ErrorBox`, input classes).
-- [x] 12 subnetting routes live, all static, client-side, unique metadata + FAQ + related links.
-- [x] 9 IP-tools routes live, same pattern (pages built via parallel subagents, verified by read-back + tsc + build).
-- [x] Homepage lists Subnetting (12) + IP Tools (9). Sitemap covers `/` + 21 tools.
-- [x] Tests: `tests/subnet.test.ts` (12) + `tests/iptools.test.ts` (10) + sample. `npm test` green (23 pass).
-- [x] Typecheck + `next build` green (26 static pages incl. `/`, `/_not-found`, `/sitemap.xml`).
-- [ ] NOT started: DNS/lookups (#22-30), utilities (#31-35), converters (#36-41). See `extra/didyoupingit.md` §2.
+- [x] Core lib IPv6: `src/lib/ipv6.ts` — BigInt-based parse/expand/compress (RFC 5952) + subnet calc + CIDR parse. tsconfig target ES2017 → ES2020 for BigInt literals.
+- [x] Libs: `src/lib/converters.ts` (BigInt hex/bin/dec, strict, null on invalid), `src/lib/ports.ts` (~65 common ports + search + range class), `src/lib/http-status.ts` (36 codes + search), `src/lib/dns.ts` (**server-only**: node:dns wrappers, hostname allowlist, SSRF guard rejecting private targets).
+- [x] API routes (dynamic, `force-dynamic`): `/api/dns?name=&type=` (A/AAAA/MX/CNAME/TXT/NS, 8s timeout, readable 404s), `/api/dns/reverse?ip=`, `/api/headers?url=` (SSRF-guarded, 12s abort, manual redirect), `/api/ping?host=` (system ping ICMP first, TCP-connect fallback labeled honestly), `/api/traceroute?host=&maxHops=` (traceroute→tracepath fallback, honest 501 when binaries missing).
+- [x] 12 subnetting + 9 IP-tools + 6 converters + 4 lookup/URL pages: static, client-side, unique metadata + FAQ + related.
+- [x] 7 DNS + header + ping + traceroute pages: static shells, client fetch to APIs with loading/error states.
+- [x] Homepage: search bar (client filter over `src/lib/tools.ts` index, min 2 chars, top 8, ARIA combobox/listbox), Popular tools (§15 first-10 list), 8 category cards with anchors, per-category sections, Recently added (8), privacy statement. Cisco card shows "Soon", no dead links.
+- [x] Tests: subnet (12) + iptools (10) + remaining converters/ports/status (4) + homepage index/search (4) + sample. `npm test` green (31 pass).
+- [x] Typecheck + `next build` green (41 static tool pages + `/`, `/_not-found`, `/sitemap.xml` + 5 dynamic APIs).
+- [ ] Phase 2/3/4 (MAC, packet decoders, bandwidth calcs, Cisco, learning) — see `extra/didyoupingit.md` §5-7. NOT started.
 
 ## Routes (Phase 1 Subnetting)
 
@@ -48,6 +49,31 @@ Homepage (`/`) lists all 21. Sitemap at `src/app/sitemap.ts` covers `/` + 21 too
 | 20 | IPv6 Address Validator | `/ipv6-validator` |
 | 21 | IPv6 Compression & Expansion | `/ipv6-compression` |
 
+## Routes (Phase 1 Lookups #22-30, Utilities #31-35, Converters #36-41)
+
+| # | Tool | Route | Mode |
+|---|------|-------|------|
+| 22 | Port Number Lookup | `/port-number-lookup` | client, static dataset |
+| 23 | HTTP Status Code Lookup | `/http-status-code-lookup` | client, static dataset |
+| 24 | DNS Lookup | `/dns-lookup` | server via `/api/dns` |
+| 25 | Reverse DNS Lookup | `/reverse-dns-lookup` | server via `/api/dns/reverse` |
+| 26 | MX Record Lookup | `/mx-record-lookup` | server via `/api/dns` |
+| 27 | A Record Lookup | `/a-record-lookup` | server via `/api/dns` |
+| 28 | CNAME Lookup | `/cname-lookup` | server via `/api/dns` |
+| 29 | TXT Record Lookup | `/txt-record-lookup` | server via `/api/dns` |
+| 30 | NS Record Lookup | `/ns-record-lookup` | server via `/api/dns` |
+| 31 | Ping Tester | `/ping-tester` | server via `/api/ping` |
+| 32 | Traceroute | `/traceroute` | server via `/api/traceroute` |
+| 33 | HTTP Header Checker | `/http-header-checker` | server via `/api/headers` |
+| 34 | URL Parser | `/url-parser` | client, built-in URL API |
+| 35 | URL Encoder/Decoder | `/url-encoder-decoder` | client, encodeURIComponent |
+| 36 | Hex to Binary | `/hex-to-binary` | client, BigInt |
+| 37 | Binary to Hex | `/binary-to-hex` | client, BigInt |
+| 38 | Decimal to Binary | `/decimal-to-binary` | client, BigInt |
+| 39 | Binary to Decimal | `/binary-to-decimal` | client, BigInt |
+| 40 | Hex to Decimal | `/hex-to-decimal` | client, BigInt |
+| 41 | Decimal to Hex | `/decimal-to-hex` | client, BigInt |
+
 ## Core lib API (`src/lib/ipv4.ts`)
 
 - `parseIPv4(s) → uint32 | null` — strict 4-octet decimal.
@@ -79,12 +105,26 @@ IPv6 (`src/lib/ipv6.ts`, BigInt):
 - `src/app/<route>/calculator.tsx` — `'use client'`, `useState` inputs + `useMemo` result, `ErrorBox` on invalid, `CopyButton` + Reset, results via `ResultRow`/table. No server calls.
 - `ToolShell` props: `title, description, children, example, explanation, faqs[{q,a}], related[{href,label}]`.
 
+## Homepage structure (§3 done)
+
+- `src/lib/tools.ts`: single index, 41 entries `{href, title, desc, category, keywords, popular?, recent?}`, `CATEGORIES` (8, Cisco empty with Phase 3 blurb), `toolsByCategory()` (calculators = curated cross-links, cisco = []), `searchTools()` (all query words must match, title ×3).
+- `src/components/ToolSearch.tsx`: client search, placeholder "What networking problem are you solving?", live results as links.
+- `src/app/page.tsx`: hero + search, Popular (10), category cards → anchored sections, Recently added (8), privacy (client-side vs server-side split stated honestly).
+
 ## Verification
 
-1. `npm test` — 23/23 pass (12 subnet + 10 iptools + 1 sample).
-2. `npx tsc --noEmit` — clean (after ES2020 bump; stale tsbuildinfo deleted once).
-3. `npx next build` — clean, 26 static routes.
-4. Manual spot checks: `192.168.1.10/24` full info; `/24→/26` split = 4 blocks; VLSM `[100,50,10]` in `/24` → `/25,/26,/28`; `255.0.255.0` rejected as non-contiguous; `2001:db8::1/64` → network `2001:db8::`, last `2001:db8::ffff:ffff:ffff:ffff`; `::ffff:192.0.2.1` valid; single-zero-group `2001:db8:0:1:1:1:1:1` not shrunk.
+1. `npm test` — 31/31 pass (12 subnet + 10 iptools + 4 converters/ports/status + 4 homepage index + 1 sample).
+2. `npx tsc --noEmit` — clean.
+3. `npx next build` — clean, 41 static tool pages + 5 dynamic APIs.
+4. Live `next start` smoke test: bad hostname → 400 JSON; valid DNS in sandbox → graceful 502 ("DNS server failed or timed out", sandbox blocks outbound DNS — deploy env differs); private ping target → 403 SSRF refusal. System `ping`/`traceroute` binaries present locally; ping 8.8.8.8 ICMP OK.
+5. Spot checks: `192.168.1.10/24` full info; `/24→/26` split = 4 blocks; VLSM `[100,50,10]` → `/25,/26,/28`; `255.0.255.0` rejected; `2001:db8::1/64` → network `2001:db8::`; `::ffff:192.0.2.1` valid; `FF↔11111111↔255` converters round-trip incl. 2^64.
+
+## Sandbox limits (not code bugs)
+
+- Outbound DNS blocked here (`ETIMEOUT` on direct node:dns). DNS/headers pages show graceful errors locally; verify on deploy.
+- Traceroute/ping ICMP need system binaries + raw socket perms; code falls back (TCP ping) or 501s honestly.
+
+## Known limits / next fixes
 
 ## Known limits / next fixes
 
