@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from "react";
+import posthog from "posthog-js";
 import { CopyButton, ErrorBox, ResultRow, inputCls, labelCls } from "@/components/tool-ui";
 
 interface WhoisData {
@@ -19,10 +20,16 @@ export default function Calculator() {
     try {
       const r = await fetch(`/api/whois?` + new URLSearchParams({ q: q.trim() }));
       const j = await r.json();
-      if (!r.ok || j.error) setError(j.error ?? "WHOIS lookup failed.");
-      else setData(j as WhoisData);
+      if (!r.ok || j.error) {
+        setError(j.error ?? "WHOIS lookup failed.");
+        posthog.capture("tool_run", { tool: "whois-lookup", success: false });
+      } else {
+        setData(j as WhoisData);
+        posthog.capture("tool_run", { tool: "whois-lookup", success: true });
+      }
     } catch {
       setError("Request failed. Check your connection and try again.");
+      posthog.capture("tool_run", { tool: "whois-lookup", success: false });
     } finally { setLoading(false); }
   }
 

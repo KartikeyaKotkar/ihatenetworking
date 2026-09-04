@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import posthog from "posthog-js";
 import { TOOLS, categoryLabel, popularTools, searchTools } from "@/lib/tools";
 import { Badge } from "@/components/ui/badge";
 
@@ -44,10 +45,15 @@ export default function SearchPalette({ open, onClose }: { open: boolean; onClos
 
   const go = useCallback(
     (href: string) => {
+      posthog.capture("search_tool_selected", {
+        tool_href: href,
+        was_searching: searching,
+        result_count: results.length,
+      });
       onClose();
       router.push(href);
     },
-    [onClose, router]
+    [onClose, router, searching, results.length]
   );
 
   useEffect(() => {

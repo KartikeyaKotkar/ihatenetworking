@@ -42,7 +42,7 @@ export default function Home() {
         <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-gray-600">
           Free · No signup · Private
         </p>
-        <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">did you ping it</h1>
+        <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">did you ping it?</h1>
         <p className="max-w-2xl text-sm text-gray-400 sm:text-base">
           Small networking tasks, solved instantly. 85 tools for subnets, DNS, packets, Cisco, testing, conversion, and learning.
         </p>

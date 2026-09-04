@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from "react";
+import posthog from "posthog-js";
 import { CopyButton, ErrorBox, ResultRow, inputCls, labelCls } from "@/components/tool-ui";
 
 interface HeaderData {
@@ -20,10 +21,16 @@ export default function Calculator() {
     try {
       const r = await fetch(`/api/headers?` + new URLSearchParams({ url: url.trim() }));
       const j = await r.json();
-      if (!r.ok || j.error) setError(j.error ?? "Check failed.");
-      else setData(j as HeaderData);
+      if (!r.ok || j.error) {
+        setError(j.error ?? "Check failed.");
+        posthog.capture("tool_run", { tool: "http-header-checker", success: false });
+      } else {
+        setData(j as HeaderData);
+        posthog.capture("tool_run", { tool: "http-header-checker", success: true, http_status: j.status });
+      }
     } catch {
       setError("Request failed. Check your connection and try again.");
+      posthog.capture("tool_run", { tool: "http-header-checker", success: false });
     } finally { setLoading(false); }
   }
 

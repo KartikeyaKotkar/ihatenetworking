@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+.claude/skills/integration-nextjs-app-router/
+.next/
+extra/
+node_modules/

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from "react";
+import posthog from "posthog-js";
 import { CopyButton, ErrorBox, ResultRow, inputCls, labelCls } from "@/components/tool-ui";
 
 interface TraceData { host: string; method: string; raw: string }
@@ -18,10 +19,16 @@ export default function Calculator() {
     try {
       const r = await fetch(`/api/traceroute?` + new URLSearchParams({ host: host.trim(), maxHops: maxHops.trim() || "20" }));
       const j = await r.json();
-      if (!r.ok || j.error) setError(j.error ?? "Traceroute failed.");
-      else setData(j as TraceData);
+      if (!r.ok || j.error) {
+        setError(j.error ?? "Traceroute failed.");
+        posthog.capture("tool_run", { tool: "traceroute", success: false });
+      } else {
+        setData(j as TraceData);
+        posthog.capture("tool_run", { tool: "traceroute", success: true });
+      }
     } catch {
       setError("Request failed. Check your connection and try again.");
+      posthog.capture("tool_run", { tool: "traceroute", success: false });
     } finally { setLoading(false); }
   }
 

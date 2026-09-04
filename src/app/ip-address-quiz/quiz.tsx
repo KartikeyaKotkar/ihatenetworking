@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from "react";
+import posthog from "posthog-js";
 import type { Question } from "@/lib/learn";
 import { ipQuizQuestion } from "@/lib/learn";
 
@@ -29,7 +30,9 @@ export default function Quiz() {
     if (picked === null || checked) return;
     setChecked(true);
     setTotal((t) => t + 1);
-    if (picked === q.answer) setScore((s) => s + 1);
+    const isCorrect = picked === q.answer;
+    if (isCorrect) setScore((s) => s + 1);
+    posthog.capture("quiz_answer_checked", { quiz: "ip-address", correct: isCorrect });
   }
 
   function newQuestion(): void {
@@ -39,6 +42,7 @@ export default function Quiz() {
   }
 
   function reset(): void {
+    posthog.capture("quiz_reset", { quiz: "ip-address", score, total });
     setScore(0);
     setTotal(0);
     setQ(ipQuizQuestion());

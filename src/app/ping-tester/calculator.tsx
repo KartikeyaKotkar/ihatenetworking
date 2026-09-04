@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from "react";
+import posthog from "posthog-js";
 import { CopyButton, ErrorBox, ResultRow, inputCls, labelCls } from "@/components/tool-ui";
 
 interface PingData {
@@ -20,10 +21,16 @@ export default function Calculator() {
     try {
       const r = await fetch(`/api/ping?` + new URLSearchParams({ host: host.trim() }));
       const j = await r.json();
-      if (!r.ok || j.error) setError(j.error ?? "Ping failed.");
-      else setData(j as PingData);
+      if (!r.ok || j.error) {
+        setError(j.error ?? "Ping failed.");
+        posthog.capture("tool_run", { tool: "ping-tester", success: false });
+      } else {
+        setData(j as PingData);
+        posthog.capture("tool_run", { tool: "ping-tester", success: true });
+      }
     } catch {
       setError("Request failed. Check your connection and try again.");
+      posthog.capture("tool_run", { tool: "ping-tester", success: false });
     } finally { setLoading(false); }
   }
 

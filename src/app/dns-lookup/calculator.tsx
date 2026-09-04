@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from "react";
+import posthog from "posthog-js";
 import { CopyButton, ErrorBox, ResultRow, inputCls, labelCls } from "@/components/tool-ui";
 
 const TYPES = ["A", "AAAA", "MX", "CNAME", "TXT", "NS"] as const;
@@ -20,10 +21,16 @@ export default function Calculator() {
     try {
       const r = await fetch(`/api/dns?` + new URLSearchParams({ name: name.trim(), type }));
       const j = await r.json();
-      if (!r.ok || j.error) setError(j.error ?? "Lookup failed.");
-      else setAnswer(j.answer as DnsAnswer);
+      if (!r.ok || j.error) {
+        setError(j.error ?? "Lookup failed.");
+        posthog.capture("tool_run", { tool: "dns-lookup", record_type: type, success: false });
+      } else {
+        setAnswer(j.answer as DnsAnswer);
+        posthog.capture("tool_run", { tool: "dns-lookup", record_type: type, success: true });
+      }
     } catch {
       setError("Request failed. Check your connection and try again.");
+      posthog.capture("tool_run", { tool: "dns-lookup", record_type: type, success: false });
     } finally { setLoading(false); }
   }
 
