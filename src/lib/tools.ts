@@ -142,6 +142,14 @@ export function toolsByCategory(id: CategoryId): ToolEntry[] {
   return TOOLS.filter((t) => t.category === id);
 }
 
+export function categoryLabel(id: CategoryId): string {
+  return CATEGORIES.find((c) => c.id === id)?.label ?? id;
+}
+
+export function popularTools(): ToolEntry[] {
+  return TOOLS.filter((t) => t.popular);
+}
+
 export function searchTools(query: string, limit = 8): ToolEntry[] {
   const q = query.trim().toLowerCase();
   if (q.length < 2) return [];

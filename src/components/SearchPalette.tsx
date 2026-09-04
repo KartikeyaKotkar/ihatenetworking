@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { searchTools } from "@/lib/tools";
+import { TOOLS, categoryLabel, popularTools, searchTools } from "@/lib/tools";
 
 export function SearchButton({ onOpen }: { onOpen: () => void }) {
   return (
@@ -28,7 +28,8 @@ export default function SearchPalette({ open, onClose }: { open: boolean; onClos
   const [active, setActive] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
-  const results = useMemo(() => searchTools(q), [q]);
+  const searching = q.trim().length >= 2;
+  const results = useMemo(() => (searching ? searchTools(q) : popularTools().slice(0, 8)), [q, searching]);
 
   useEffect(() => {
     if (open) {
@@ -90,7 +91,7 @@ export default function SearchPalette({ open, onClose }: { open: boolean; onClos
             ref={inputRef}
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="Type to search 41 tools…"
+            placeholder={`Type to search ${TOOLS.length} tools…`}
             aria-label="Search networking tools"
             aria-controls="palette-results"
             aria-activedescendant={results[active] ? `palette-${results[active].href}` : undefined}
@@ -101,14 +102,12 @@ export default function SearchPalette({ open, onClose }: { open: boolean; onClos
           </kbd>
         </div>
         <ul id="palette-results" role="listbox" className="max-h-80 overflow-y-auto p-2 text-left">
-          {q.trim().length >= 2 && results.length === 0 && (
+          <li aria-hidden="true" className="px-4 pb-1 pt-2 font-mono text-[10px] uppercase tracking-wider text-gray-600">
+            {searching ? `${results.length} result${results.length === 1 ? "" : "s"}` : "Suggested to start"}
+          </li>
+          {searching && results.length === 0 && (
             <li className="px-4 py-6 text-center text-sm text-gray-500">
               No tool matches. Try subnet, dns, ping, binary.
-            </li>
-          )}
-          {q.trim().length < 2 && (
-            <li className="px-4 py-6 text-center text-sm text-gray-600">
-              Start typing. Arrow keys navigate, Enter opens.
             </li>
           )}
           {results.map((t, i) => (
@@ -125,8 +124,8 @@ export default function SearchPalette({ open, onClose }: { open: boolean; onClos
                   <span className="block text-sm font-medium text-gray-100">{t.title}</span>
                   <span className="block text-xs text-gray-500">{t.desc}</span>
                 </span>
-                <span className="shrink-0 font-mono text-[10px] uppercase tracking-wider text-gray-600">
-                  {t.href.slice(1).split("-")[0]}
+                <span className="shrink-0 rounded border border-[var(--panel-border)] bg-white/5 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-gray-500">
+                  {categoryLabel(t.category)}
                 </span>
               </button>
             </li>

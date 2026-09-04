@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import HomeSearch from "@/components/HomeSearch";
-import { CATEGORIES, TOOLS, toolsByCategory } from "@/lib/tools";
+import { CATEGORIES, TOOLS, categoryLabel, toolsByCategory } from "@/lib/tools";
 
 export const metadata: Metadata = {
   title: "did you ping it — Free Subnetting, DNS & Networking Tools",
@@ -101,6 +101,9 @@ export default function Home() {
             <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
               {popular.map((t) => (
                 <Link key={t.href} href={t.href} className={cardCls}>
+                  <span className="mb-2 inline-block rounded border border-[var(--panel-border)] bg-white/5 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-gray-500">
+                    {categoryLabel(t.category)}
+                  </span>
                   <h3 className="text-base font-semibold text-gray-100">{t.title}</h3>
                   <p className="mt-1.5 text-sm text-gray-400">{t.desc}</p>
                 </Link>
