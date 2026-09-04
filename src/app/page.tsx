@@ -1,44 +1,62 @@
 import Link from "next/link";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "did you ping it — Free Subnetting & Networking Tools",
+  description:
+    "Free, fast, privacy-first subnetting calculators: subnet, CIDR, VLSM, splitter, masks, ranges. No signup, client-side.",
+};
+
+const SUBNET_TOOLS = [
+  { href: "/subnet-calculator", title: "IPv4 Subnet Calculator", desc: "Network, broadcast, range from IP + prefix" },
+  { href: "/cidr-calculator", title: "CIDR Calculator", desc: "Decode 10.0.0.5/16 style input" },
+  { href: "/vlsm-calculator", title: "VLSM Calculator", desc: "Allocate subnets by host count" },
+  { href: "/subnet-splitter", title: "Subnet Splitter", desc: "Split network into equal subnets" },
+  { href: "/subnet-range-calculator", title: "Subnet Range Calculator", desc: "First to last usable IP" },
+  { href: "/usable-host-calculator", title: "Usable Host Calculator", desc: "Hosts per prefix length" },
+  { href: "/subnet-mask-calculator", title: "Subnet Mask Calculator", desc: "Mask for host count" },
+  { href: "/wildcard-mask-calculator", title: "Wildcard Mask Calculator", desc: "Inverse mask for ACLs" },
+  { href: "/cidr-to-subnet-mask", title: "CIDR to Subnet Mask", desc: "/24 → 255.255.255.0" },
+  { href: "/subnet-mask-to-cidr", title: "Subnet Mask to CIDR", desc: "255.255.255.0 → /24" },
+  { href: "/network-address-calculator", title: "Network Address Calculator", desc: "IP AND mask" },
+  { href: "/broadcast-address-calculator", title: "Broadcast Address Calculator", desc: "Last address of subnet" },
+];
 
 export default function Home() {
   return (
-    <div className="min-h-screen p-8 sm:p-20 font-[family-name:var(--font-sans)] flex flex-col gap-12 items-center text-center">
-      <header className="flex flex-col gap-4 items-center">
-        <h1 className="text-4xl sm:text-6xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-cyan-500">
-          did you ping it
-        </h1>
-        <p className="text-lg text-gray-400 max-w-2xl">
-          Small networking tasks, solved instantly. Free, fast, and privacy-first.
+    <div className="mx-auto flex min-h-screen w-full max-w-4xl flex-col items-center px-5 py-14 text-center">
+      <header className="flex flex-col items-center gap-4">
+        <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl">did you ping it</h1>
+        <p className="max-w-2xl text-sm text-gray-400 sm:text-base">
+          Small networking tasks, solved instantly. Free, fast, privacy-first. All subnet math runs in your browser.
         </p>
       </header>
 
-      <main className="flex flex-col gap-8 w-full max-w-3xl items-center">
-        {/* Search Bar Placeholder */}
-        <div className="w-full relative group">
-          <div className="absolute -inset-0.5 bg-gradient-to-r from-[var(--color-neon-green)] to-[var(--color-neon-cyan)] rounded-xl blur opacity-30 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
-          <input
-            type="text"
-            placeholder="What networking problem are you solving?"
-            className="relative w-full glass-panel rounded-xl px-6 py-4 text-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[var(--color-neon-green)]"
-          />
-        </div>
-
-        {/* Categories Grid */}
-        <div className="w-full grid grid-cols-2 sm:grid-cols-3 gap-4 text-left">
-          {["Subnetting", "IP Addressing", "DNS", "Ports & Protocols", "Network Testing", "Calculators"].map((cat) => (
-            <Link 
-              href={`#${cat.toLowerCase().replace(/\s+/g, '-')}`} 
-              key={cat}
-              className="glass-panel p-4 rounded-lg hover:border-[var(--color-neon-cyan)] transition-colors group cursor-pointer"
+      <main className="mt-10 w-full text-left">
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-gray-500">Subnetting — 12 tools live</h2>
+        <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+          {SUBNET_TOOLS.map((t) => (
+            <Link
+              key={t.href}
+              href={t.href}
+              className="glass-panel rounded-lg p-4 transition-colors hover:border-[var(--color-neon-cyan)]"
             >
-              <h3 className="font-semibold text-gray-300 group-hover:text-[var(--color-neon-cyan)]">{cat}</h3>
+              <h3 className="text-sm font-semibold text-gray-100">{t.title}</h3>
+              <p className="mt-1 text-xs text-gray-400">{t.desc}</p>
             </Link>
           ))}
         </div>
+
+        <div className="glass-panel mt-8 rounded-lg p-4">
+          <h2 className="text-sm font-semibold text-gray-200">Privacy</h2>
+          <p className="mt-1 text-xs text-gray-400">
+            No account. No tracking inputs. Subnet calculators run 100% client-side.
+          </p>
+        </div>
       </main>
 
-      <footer className="mt-auto text-sm text-gray-500">
-        <p>No account required. 100% client-side processing where practical.</p>
+      <footer className="mt-10 text-xs text-gray-600">
+        <p>Phase 1 MVP: Subnetting only. IP tools, DNS, utilities ship next.</p>
       </footer>
     </div>
   );
