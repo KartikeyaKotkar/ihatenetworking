@@ -2,8 +2,8 @@ import { describe, it, expect } from "vitest";
 import { TOOLS, CATEGORIES, searchTools, toolsByCategory } from "@/lib/tools";
 
 describe("tool index", () => {
-  it("covers all 70 live routes", () => {
-    expect(TOOLS.length).toBe(70);
+  it("covers all 85 live routes", () => {
+    expect(TOOLS.length).toBe(85);
     const hrefs = new Set(TOOLS.map((t) => t.href));
     for (const h of ["/subnet-calculator", "/traceroute", "/decimal-to-hex", "/dns-lookup", "/asn-lookup", "/tcp-header-decoder", "/bandwidth-calculator", "/whois-lookup"]) {
       expect(hrefs.has(h)).toBe(true);

@@ -34,7 +34,7 @@ export default function Calculator() {
         <button type="button" onClick={reset} className="rounded-md border border-[var(--panel-border)] px-3 py-1.5 text-xs text-gray-400 hover:text-white">Reset</button>
       </div>
       <div className="mt-4"><ErrorBox message={error} />
-        {config && <pre className="overflow-x-auto rounded-lg bg-black/40 p-4 font-mono text-xs leading-relaxed text-emerald-300">{config}</pre>}
+        {config && <pre className="overflow-x-auto rounded-lg bg-black/40 p-4 font-mono text-xs leading-relaxed text-zinc-200">{config}</pre>}
         <p className="mt-2 text-xs text-gray-500">Starter template only — placeholders, no real secrets. Review before applying to real gear.</p>
       </div>
     </div>

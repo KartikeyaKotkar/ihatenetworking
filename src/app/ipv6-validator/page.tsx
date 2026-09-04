@@ -23,6 +23,7 @@ export default function Page() {
         { href: "/ipv6-compression", label: "IPv6 Compression" },
         { href: "/ipv6-subnet-calculator", label: "IPv6 Subnet Calculator" },
         { href: "/ipv4-validator", label: "IPv4 Validator" },
+        { href: "/ipv6-prefix-reference", label: "IPv6 Prefix Reference" },
       ]}
     >
       <Calculator />

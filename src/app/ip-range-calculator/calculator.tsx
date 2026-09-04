@@ -1,12 +1,12 @@
 'use client';
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { describeIPRange, parseIPv4 } from "@/lib/ipv4";
-import { CopyButton, ErrorBox, ResultRow, inputCls, labelCls } from "@/components/tool-ui";
+import { CopyButton, ErrorBox, ResultRow, inputCls, labelCls, usePersistentState } from "@/components/tool-ui";
 
 export default function Calculator() {
-  const [start, setStart] = useState("192.168.1.1");
-  const [end, setEnd] = useState("192.168.1.254");
+  const [start, setStart] = usePersistentState("iprange:start", "192.168.1.1");
+  const [end, setEnd] = usePersistentState("iprange:end", "192.168.1.254");
   const result = useMemo(() => {
     if (!start.trim() && !end.trim()) return { info: null, error: "" };
     if (parseIPv4(start) === null) return { info: null, error: "Invalid start IP. Use 4 octets 0-255, e.g. 192.168.1.1." };

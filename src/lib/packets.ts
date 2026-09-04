@@ -94,6 +94,18 @@ const TCP_FLAGS: [number, string][] = [
   [0x08, "PSH"], [0x04, "RST"], [0x02, "SYN"], [0x01, "FIN"],
 ];
 
+export const TCP_FLAG_MEANINGS: Record<string, string> = {
+  NS: "Nonce Sum, ECN concealment protection",
+  CWR: "Congestion Window Reduced, sender throttles",
+  ECE: "ECN Echo, network congestion signal",
+  URG: "Urgent pointer field significant",
+  ACK: "Acknowledgment number valid",
+  PSH: "Push data to application now",
+  RST: "Reset connection immediately",
+  SYN: "Synchronize sequence numbers, open",
+  FIN: "Finish, no more data, close",
+};
+
 export function decodeTCPHeader(hex: string): TCPHeader | null {
   const b = parseHexBytes(hex);
   if (!b || b.length < 20) return null;

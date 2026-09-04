@@ -3,9 +3,7 @@
 :root {
   --background: #050505; /* Deep dark background */
   --foreground: #e5e7eb; /* Gray-200 text */
-  
-  --neon-green: #39ff14;
-  --neon-cyan: #00f3ff;
+
   --panel-bg: #111111; /* Slightly lighter for cards/panels */
   --panel-border: #333333;
 }
@@ -16,8 +14,6 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   
-  --color-neon-green: var(--neon-green);
-  --color-neon-cyan: var(--neon-cyan);
   --color-panel-bg: var(--panel-bg);
   --color-panel-border: var(--panel-border);
 }

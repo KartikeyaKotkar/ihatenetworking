@@ -19,8 +19,8 @@ export default function Calculator() {
     <div>
       <label className={labelCls}>Mode</label>
       <div className="flex gap-2">
-        <button type="button" onClick={() => setMode("encode")} className={`rounded-md border px-3 py-1.5 text-xs ${mode === "encode" ? "border-[var(--color-neon-cyan)] text-white" : "border-[var(--panel-border)] text-gray-400 hover:text-white"}`}>Encode</button>
-        <button type="button" onClick={() => setMode("decode")} className={`rounded-md border px-3 py-1.5 text-xs ${mode === "decode" ? "border-[var(--color-neon-cyan)] text-white" : "border-[var(--panel-border)] text-gray-400 hover:text-white"}`}>Decode</button>
+        <button type="button" onClick={() => setMode("encode")} className={`rounded-md border px-3 py-1.5 text-xs ${mode === "encode" ? "border-zinc-500 text-white" : "border-[var(--panel-border)] text-gray-400 hover:text-white"}`}>Encode</button>
+        <button type="button" onClick={() => setMode("decode")} className={`rounded-md border px-3 py-1.5 text-xs ${mode === "decode" ? "border-zinc-500 text-white" : "border-[var(--panel-border)] text-gray-400 hover:text-white"}`}>Decode</button>
       </div>
       <label className={`${labelCls} mt-4`}>Input</label>
       <textarea className={`${inputCls} min-h-20`} value={val} onChange={(e) => setVal(e.target.value)} placeholder={mode === "encode" ? "hello world?" : "hello%20world%3F"} />

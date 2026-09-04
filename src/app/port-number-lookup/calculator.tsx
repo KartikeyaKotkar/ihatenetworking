@@ -1,11 +1,11 @@
 'use client';
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { lookupPort, searchPorts, wellKnownRange } from "@/lib/ports";
-import { CopyButton, ErrorBox, ResultRow, inputCls, labelCls } from "@/components/tool-ui";
+import { CopyButton, ErrorBox, ResultRow, inputCls, labelCls, usePersistentState } from "@/components/tool-ui";
 
 export default function Calculator() {
-  const [val, setVal] = useState("443");
+  const [val, setVal] = usePersistentState("port:val", "443");
   const r = useMemo(() => {
     const q = val.trim();
     if (q === "") return { hits: [], error: "", range: "", copy: "" };

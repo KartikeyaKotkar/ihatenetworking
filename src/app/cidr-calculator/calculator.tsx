@@ -1,11 +1,11 @@
 'use client';
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { parseCIDR, describeSubnet, ipv4ToString } from "@/lib/ipv4";
-import { CopyButton, ErrorBox, ResultRow, inputCls, labelCls } from "@/components/tool-ui";
+import { CopyButton, ErrorBox, ResultRow, inputCls, labelCls, usePersistentState } from "@/components/tool-ui";
 
 export default function Calculator() {
-  const [cidr, setCidr] = useState("10.0.0.5/16");
+  const [cidr, setCidr] = usePersistentState("cidr:cidr", "10.0.0.5/16");
   const result = useMemo(() => {
     if (!cidr.trim()) return { info: null, error: "" };
     const c = parseCIDR(cidr);

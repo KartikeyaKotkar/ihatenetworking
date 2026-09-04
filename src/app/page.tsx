@@ -24,7 +24,7 @@ export default function Home() {
         </p>
         <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">did you ping it?</h1>
         <p className="max-w-2xl text-sm text-gray-400 sm:text-base">
-          Small networking tasks, solved instantly. 70 tools for subnets, DNS, packets, Cisco, testing, and conversion.
+          Small networking tasks, solved instantly. 85 tools for subnets, DNS, packets, Cisco, testing, conversion, and learning.
         </p>
         <div className="w-full max-w-2xl">
           <HomeSearch />
@@ -154,7 +154,7 @@ export default function Home() {
       </div>
 
       <footer className="mt-14 text-center text-xs text-gray-600">
-        <p>Phase 1 MVP + Phase 2 + Phase 3 complete: 70 tools live. No account, no tracking inputs.</p>
+        <p>Phase 1 MVP + Phase 2 + Phase 3 + Phase 4 complete: 85 tools live. No account, no tracking inputs.</p>
       </footer>
     </div>
   );

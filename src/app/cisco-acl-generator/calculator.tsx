@@ -53,7 +53,7 @@ export default function Calculator() {
         <button type="button" onClick={() => { setNum("100"); setAction("permit"); setProtocol("tcp"); setSrc("any"); setDst("any"); setPort(""); setRemark(""); }} className="rounded-md border border-[var(--panel-border)] px-3 py-1.5 text-xs text-gray-400 hover:text-white">Reset</button>
       </div>
       <div className="mt-4"><ErrorBox message={r.error} />
-        {r.lines && <pre className="overflow-x-auto rounded-lg bg-black/40 p-4 font-mono text-sm text-emerald-300">{r.text}</pre>}
+        {r.lines && <pre className="overflow-x-auto rounded-lg bg-black/40 p-4 font-mono text-sm text-zinc-200">{r.text}</pre>}
       </div>
     </div>
   );

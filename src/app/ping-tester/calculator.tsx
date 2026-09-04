@@ -34,7 +34,7 @@ export default function Calculator() {
       <label className={labelCls}>Host</label>
       <input className={inputCls} value={host} onChange={(e) => setHost(e.target.value)} placeholder="google.com" autoComplete="off" spellCheck={false} />
       <div className="mt-3 flex gap-2">
-        <button type="submit" disabled={loading} className="rounded-md bg-emerald-500 px-4 py-1.5 text-xs font-semibold text-black hover:bg-emerald-400 disabled:opacity-50">{loading ? "Pinging…" : "Ping"}</button>
+        <button type="submit" disabled={loading} className="rounded-md bg-zinc-200 px-4 py-1.5 text-xs font-semibold text-black hover:bg-white disabled:opacity-50">{loading ? "Pinging…" : "Ping"}</button>
         <CopyButton text={data ? `${data.host} loss=${data.lossPct}% min/avg/max=${data.min}/${data.avg}/${data.max} ms (${data.method})` : ""} />
         <button type="button" onClick={reset} className="rounded-md border border-[var(--panel-border)] px-3 py-1.5 text-xs text-gray-400 hover:text-white">Reset</button>
       </div>
@@ -43,7 +43,7 @@ export default function Calculator() {
         {data && (
           <div className="rounded-lg bg-black/40 p-4">
             <div className="mb-2">
-              <span className={`inline-block rounded px-2 py-0.5 font-mono text-xs font-semibold ${data.method === "icmp" ? "bg-emerald-500/20 text-emerald-300" : "bg-amber-500/20 text-amber-300"}`}>
+              <span className={`inline-block rounded px-2 py-0.5 font-mono text-xs font-semibold ${data.method === "icmp" ? "bg-zinc-200/20 text-zinc-200" : "bg-white/10 text-zinc-400"}`}>
                 {data.method === "icmp" ? "ICMP — real ping" : "TCP fallback"}
               </span>
               {data.method === "tcp" && <p className="mt-1 text-xs text-gray-500">ICMP is blocked from this server, so latency was measured via TCP connect to ports 443/80 instead. Values are comparable but not true ICMP.</p>}

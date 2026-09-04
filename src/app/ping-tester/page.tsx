@@ -23,6 +23,7 @@ export default function Page() {
         { href: "/traceroute", label: "Traceroute" },
         { href: "/dns-lookup", label: "DNS Lookup" },
         { href: "/http-header-checker", label: "HTTP Header Checker" },
+        { href: "/icmp-type-code-lookup", label: "ICMP Type Lookup" },
       ]}
     >
       <Calculator />

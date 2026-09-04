@@ -22,6 +22,7 @@ export default function Page() {
         { href: "/cisco-config-generator", label: "Cisco Config Generator" },
         { href: "/cisco-port-range-generator", label: "Cisco Port Range Generator" },
         { href: "/subnet-splitter", label: "Subnet Splitter" },
+        { href: "/stp-root-bridge-calculator", label: "STP Root Bridge Calculator" },
       ]}
     >
       <Calculator />

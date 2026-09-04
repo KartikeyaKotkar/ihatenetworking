@@ -32,7 +32,7 @@ export default function Calculator() {
       <input className={inputCls} value={name} onChange={(e) => setName(e.target.value)} placeholder="www.example.com" autoComplete="off" spellCheck={false} />
       <p className="mt-2 text-xs text-gray-500">No CNAME on an apex/bare domain (e.g. example.com) is normal — CNAMEs live on subdomains.</p>
       <div className="mt-3 flex gap-2">
-        <button type="submit" disabled={loading} className="rounded-md bg-emerald-500 px-4 py-1.5 text-xs font-semibold text-black hover:bg-emerald-400 disabled:opacity-50">{loading ? "Looking up…" : "Look up CNAME"}</button>
+        <button type="submit" disabled={loading} className="rounded-md bg-zinc-200 px-4 py-1.5 text-xs font-semibold text-black hover:bg-white disabled:opacity-50">{loading ? "Looking up…" : "Look up CNAME"}</button>
         <CopyButton text={answer ? answer.values.join("\n") : ""} />
         <button type="button" onClick={reset} className="rounded-md border border-[var(--panel-border)] px-3 py-1.5 text-xs text-gray-400 hover:text-white">Reset</button>
       </div>
@@ -45,7 +45,7 @@ export default function Calculator() {
             <div className="mt-2">
               <p className="text-xs text-gray-400">Alias target ({answer.values.length})</p>
               <ul className="mt-1 space-y-1">
-                {answer.values.map((v) => <li key={v} className="break-all rounded bg-white/5 px-2 py-1 font-mono text-xs text-emerald-200">{v}</li>)}
+                {answer.values.map((v) => <li key={v} className="break-all rounded bg-white/5 px-2 py-1 font-mono text-xs text-zinc-200">{v}</li>)}
               </ul>
             </div>
           </div>

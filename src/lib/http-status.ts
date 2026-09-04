@@ -46,6 +46,10 @@ const STATUSES: HttpStatus[] = [
 
 const byCode = new Map(STATUSES.map((s) => [s.code, s]));
 
+export function allStatuses(): HttpStatus[] {
+  return [...STATUSES];
+}
+
 export function lookupStatus(code: number): HttpStatus | null {
   if (!Number.isInteger(code) || code < 100 || code > 599) return null;
   return byCode.get(code) ?? null;

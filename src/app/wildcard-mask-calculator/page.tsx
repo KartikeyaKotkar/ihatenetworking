@@ -15,7 +15,7 @@ export default function Page() {
       example="/24 → wildcard 0.0.0.255"
       explanation="Wildcard = 255.255.255.255 − mask. Used in Cisco ACLs and OSPF network statements."
       faqs={[{ q: "Wildcard vs mask?", a: "Mask marks network bits (1s). Wildcard marks host bits (1s). Exact inverse." }]}
-      related={[{ href: "/subnet-mask-to-cidr", label: "Mask to CIDR" }, { href: "/cidr-to-subnet-mask", label: "CIDR to Mask" }, { href: "/subnet-calculator", label: "Subnet Calculator" }]}
+      related={[{ href: "/subnet-mask-to-cidr", label: "Mask to CIDR" }, { href: "/cidr-to-subnet-mask", label: "CIDR to Mask" }, { href: "/subnet-calculator", label: "Subnet Calculator" }, { href: "/wildcard-mask-practice", label: "Wildcard Practice" }]}
     >
       <Calculator />
     </ToolShell>

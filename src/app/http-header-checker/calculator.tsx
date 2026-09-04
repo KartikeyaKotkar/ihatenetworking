@@ -35,7 +35,7 @@ export default function Calculator() {
       <label className={labelCls}>URL</label>
       <input className={inputCls} value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://example.com" autoComplete="off" spellCheck={false} />
       <div className="mt-3 flex gap-2">
-        <button type="submit" disabled={loading} className="rounded-md bg-emerald-500 px-4 py-1.5 text-xs font-semibold text-black hover:bg-emerald-400 disabled:opacity-50">{loading ? "Fetching…" : "Check headers"}</button>
+        <button type="submit" disabled={loading} className="rounded-md bg-zinc-200 px-4 py-1.5 text-xs font-semibold text-black hover:bg-white disabled:opacity-50">{loading ? "Fetching…" : "Check headers"}</button>
         <CopyButton text={data ? entries.map(([k, v]) => `${k}: ${v}`).join("\n") : ""} />
         <button type="button" onClick={reset} className="rounded-md border border-[var(--panel-border)] px-3 py-1.5 text-xs text-gray-400 hover:text-white">Reset</button>
       </div>
@@ -53,7 +53,7 @@ export default function Calculator() {
                 <tbody>
                   {entries.map(([k, v]) => (
                     <tr key={k} className="border-t border-white/5 align-top">
-                      <td className="py-1.5 pr-3 font-mono text-xs text-cyan-300">{k}</td>
+                      <td className="py-1.5 pr-3 font-mono text-xs text-zinc-200">{k}</td>
                       <td className="break-all py-1.5 font-mono text-xs text-gray-200">{v}</td>
                     </tr>
                   ))}

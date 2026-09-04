@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export async function copyText(text: string): Promise<boolean> {
   try {
@@ -32,7 +32,7 @@ export function CopyButton({ text, label = "Copy" }: { text: string; label?: str
         setDone(ok);
         setTimeout(() => setDone(false), 1200);
       }}
-      className="rounded-md border border-[var(--panel-border)] bg-white/5 px-3 py-1.5 text-xs font-medium text-gray-200 hover:border-[var(--color-neon-cyan)] hover:text-white transition-colors"
+      className="rounded-md border border-[var(--panel-border)] bg-white/5 px-3 py-1.5 text-xs font-medium text-gray-200 hover:border-zinc-500 hover:text-white transition-colors"
     >
       {done ? "Copied" : label}
     </button>
@@ -58,6 +58,31 @@ export function ErrorBox({ message }: { message: string }) {
 }
 
 export const inputCls =
-  "w-full rounded-lg border border-[var(--panel-border)] bg-black/40 px-4 py-2.5 font-mono text-sm text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-[var(--color-neon-cyan)]";
+  "w-full rounded-lg border border-[var(--panel-border)] bg-black/40 px-4 py-2.5 font-mono text-sm text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-zinc-500";
 
 export const labelCls = "mb-1.5 block text-xs font-medium uppercase tracking-wider text-gray-400";
+
+/**
+ * useState persisted to localStorage (§9 "preserve useful state").
+ * SSR-safe: renders default first, hydrates stored value in effect (no mismatch).
+ */
+export function usePersistentState(key: string, initial: string): [string, (v: string) => void] {
+  const [value, setValue] = useState(initial);
+  useEffect(() => {
+    try {
+      const stored = window.localStorage.getItem(`dypi:${key}`);
+      if (stored !== null) setValue(stored);
+    } catch {
+      // storage unavailable: keep default
+    }
+  }, [key]);
+  const set = (v: string) => {
+    setValue(v);
+    try {
+      window.localStorage.setItem(`dypi:${key}`, v);
+    } catch {
+      // ignore
+    }
+  };
+  return [value, set];
+}

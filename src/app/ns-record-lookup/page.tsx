@@ -23,6 +23,7 @@ export default function Page() {
         { href: "/dns-lookup", label: "DNS Lookup" },
         { href: "/a-record-lookup", label: "A Record Lookup" },
         { href: "/cname-lookup", label: "CNAME Lookup" },
+        { href: "/dns-propagation-checker", label: "Propagation Checker" },
       ]}
     >
       <Calculator />

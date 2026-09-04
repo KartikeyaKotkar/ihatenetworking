@@ -33,7 +33,7 @@ export default function Calculator() {
       <div className="mt-1 space-y-1.5">
         {OPTIONS.map((o) => (
           <label key={o.label} className="flex items-center gap-2 text-sm text-gray-300">
-            <input type="checkbox" checked={sel.includes(o.label)} onChange={() => toggle(o.label)} className="accent-emerald-400" />
+            <input type="checkbox" checked={sel.includes(o.label)} onChange={() => toggle(o.label)} className="accent-zinc-300" />
             {o.label} ({o.bytes} B)
           </label>
         ))}

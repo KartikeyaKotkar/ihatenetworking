@@ -36,7 +36,7 @@ export default function Calculator() {
       <label className={labelCls}>IP address</label>
       <input className={inputCls} value={ip} onChange={(e) => setIp(e.target.value)} placeholder="8.8.8.8" autoComplete="off" spellCheck={false} />
       <div className="mt-3 flex gap-2">
-        <button type="submit" disabled={loading} className="rounded-md bg-emerald-500 px-4 py-1.5 text-xs font-semibold text-black hover:bg-emerald-400 disabled:opacity-50">{loading ? "Locating…" : "Locate IP"}</button>
+        <button type="submit" disabled={loading} className="rounded-md bg-zinc-200 px-4 py-1.5 text-xs font-semibold text-black hover:bg-white disabled:opacity-50">{loading ? "Locating…" : "Locate IP"}</button>
         <CopyButton text={data ? `${data.ip} ${loc(data)} lat=${data.lat} lon=${data.lon} isp=${data.isp} ${data.as}` : ""} />
         <button type="button" onClick={reset} className="rounded-md border border-[var(--panel-border)] px-3 py-1.5 text-xs text-gray-400 hover:text-white">Reset</button>
       </div>

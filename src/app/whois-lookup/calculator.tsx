@@ -33,7 +33,7 @@ export default function Calculator() {
       <label className={labelCls}>Domain or IP</label>
       <input className={inputCls} value={q} onChange={(e) => setQ(e.target.value)} placeholder="example.com" autoComplete="off" spellCheck={false} />
       <div className="mt-3 flex gap-2">
-        <button type="submit" disabled={loading} className="rounded-md bg-emerald-500 px-4 py-1.5 text-xs font-semibold text-black hover:bg-emerald-400 disabled:opacity-50">{loading ? "Looking up…" : "Look up WHOIS"}</button>
+        <button type="submit" disabled={loading} className="rounded-md bg-zinc-200 px-4 py-1.5 text-xs font-semibold text-black hover:bg-white disabled:opacity-50">{loading ? "Looking up…" : "Look up WHOIS"}</button>
         <CopyButton text={data ? data.raw : ""} />
         <button type="button" onClick={reset} className="rounded-md border border-[var(--panel-border)] px-3 py-1.5 text-xs text-gray-400 hover:text-white">Reset</button>
       </div>

@@ -77,6 +77,10 @@ const PORTS: PortInfo[] = [
 
 const byPort = new Map(PORTS.map((p) => [p.port, p]));
 
+export function allPorts(): PortInfo[] {
+  return [...PORTS];
+}
+
 export function lookupPort(port: number): PortInfo | null {
   if (!Number.isInteger(port) || port < 0 || port > 65535) return null;
   return byPort.get(port) ?? null;

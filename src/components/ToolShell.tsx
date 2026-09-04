@@ -32,6 +32,15 @@ export default function ToolShell({
     operatingSystem: "Any",
     offers: { "@type": "Offer", price: "0" },
   };
+  const faqLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  };
   return (
     <div className="mx-auto w-full max-w-3xl px-5 py-10">
       <Link href="/" className="text-xs text-gray-500 hover:text-gray-300">
@@ -46,7 +55,7 @@ export default function ToolShell({
         <h2 className="text-sm font-semibold text-gray-200">How to read the result</h2>
         <p className="mt-2 text-sm leading-relaxed text-gray-400">{explanation}</p>
         <h2 className="mt-5 text-sm font-semibold text-gray-200">Example</h2>
-        <code className="mt-2 block rounded-md bg-black/50 px-3 py-2 font-mono text-xs text-emerald-300">{example}</code>
+        <code className="mt-2 block rounded-md bg-black/50 px-4 py-3 font-mono text-sm leading-relaxed text-zinc-200">{example}</code>
       </div>
 
       <div className="glass-panel mt-6 rounded-xl p-5">
@@ -68,7 +77,7 @@ export default function ToolShell({
             <li key={r.href}>
               <Link
                 href={r.href}
-                className="inline-block rounded-md border border-[var(--panel-border)] bg-white/5 px-3 py-1.5 text-xs text-gray-300 hover:border-[var(--color-neon-cyan)] hover:text-white"
+                className="inline-block rounded-md border border-[var(--panel-border)] bg-white/5 px-3 py-1.5 text-xs text-gray-300 hover:border-zinc-500 hover:text-white"
               >
                 {r.label}
               </Link>
@@ -78,6 +87,7 @@ export default function ToolShell({
       </nav>
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
     </div>
   );
 }

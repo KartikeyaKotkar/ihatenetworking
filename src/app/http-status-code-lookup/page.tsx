@@ -23,6 +23,7 @@ export default function Page() {
         { href: "/port-number-lookup", label: "Port Number Lookup" },
         { href: "/http-header-checker", label: "HTTP Header Checker" },
         { href: "/url-parser", label: "URL Parser" },
+        { href: "/http-status-codes-reference", label: "Status Codes Reference" },
       ]}
     >
       <Calculator />

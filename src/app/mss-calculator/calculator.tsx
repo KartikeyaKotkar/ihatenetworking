@@ -23,10 +23,10 @@ export default function Calculator() {
       <input className={inputCls} value={mtu} onChange={(e) => setMtu(e.target.value)} placeholder="1500" inputMode="numeric" />
       <div className="mt-3 flex items-center gap-4 text-sm text-gray-300">
         <label className="flex items-center gap-2">
-          <input type="checkbox" checked={ipv6} onChange={(e) => setIpv6(e.target.checked)} className="accent-emerald-400" /> IPv6
+          <input type="checkbox" checked={ipv6} onChange={(e) => setIpv6(e.target.checked)} className="accent-zinc-300" /> IPv6
         </label>
         <label className="flex items-center gap-2">
-          <input type="checkbox" checked={ts} onChange={(e) => setTs(e.target.checked)} className="accent-emerald-400" /> Timestamps
+          <input type="checkbox" checked={ts} onChange={(e) => setTs(e.target.checked)} className="accent-zinc-300" /> Timestamps
         </label>
       </div>
       <div className="mt-3 flex gap-2">

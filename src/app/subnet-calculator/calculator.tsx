@@ -1,12 +1,12 @@
 'use client';
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { describeSubnet, parseIPv4, parsePrefix } from "@/lib/ipv4";
-import { CopyButton, ErrorBox, ResultRow, inputCls, labelCls } from "@/components/tool-ui";
+import { CopyButton, ErrorBox, ResultRow, inputCls, labelCls, usePersistentState } from "@/components/tool-ui";
 
 export default function Calculator() {
-  const [ip, setIp] = useState("192.168.1.10");
-  const [prefix, setPrefix] = useState("24");
+  const [ip, setIp] = usePersistentState("subnet:ip", "192.168.1.10");
+  const [prefix, setPrefix] = usePersistentState("subnet:prefix", "24");
   const result = useMemo(() => {
     if (!ip.trim() && !prefix.trim()) return { info: null, error: "" };
     if (parseIPv4(ip) === null) return { info: null, error: "Invalid IPv4 address. Use 4 octets 0-255, e.g. 192.168.1.10." };

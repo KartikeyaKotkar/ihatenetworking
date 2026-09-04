@@ -17,7 +17,8 @@ export type CategoryId =
   | "calculators"
   | "packet-analysis"
   | "converters"
-  | "cisco";
+  | "cisco"
+  | "learning";
 
 export interface Category {
   id: CategoryId;
@@ -35,6 +36,7 @@ export const CATEGORIES: Category[] = [
   { id: "packet-analysis", label: "Packet Analysis", blurb: "Decode headers byte by byte." },
   { id: "converters", label: "Converters", blurb: "Hex, decimal, and binary both ways, any size." },
   { id: "cisco", label: "Cisco", blurb: "Student and engineer toolkit: IOS commands, ACLs, VLANs, OSPF, EIGRP, STP." },
+  { id: "learning", label: "Learning", blurb: "Drills that grade you plus reference sheets worth bookmarking." },
 ];
 
 export const TOOLS: ToolEntry[] = [
@@ -123,6 +125,23 @@ export const TOOLS: ToolEntry[] = [
   { href: "/ospf-cost-calculator", title: "OSPF Cost Calculator", desc: "10^8 / bandwidth, min 1", category: "cisco", keywords: "ospf cost reference bandwidth", recent: true },
   { href: "/eigrp-metric-calculator", title: "EIGRP Metric Calculator", desc: "Classic composite + K note", category: "cisco", keywords: "eigrp metric k values composite", },
   { href: "/stp-root-bridge-calculator", title: "STP Root Bridge Calculator", desc: "Priority + VLAN + MAC vote", category: "cisco", keywords: "stp root bridge priority vlan election", },
+  // Phase 4: practice
+  { href: "/subnetting-practice", title: "Subnetting Practice Generator", desc: "Random drills, graded live", category: "learning", keywords: "subnet practice quiz drill exercise", recent: true },
+  { href: "/ip-address-quiz", title: "IP Address Quiz", desc: "Classify scope, graded live", category: "learning", keywords: "ip quiz classify private public", recent: true },
+  { href: "/cidr-practice", title: "CIDR Practice", desc: "Prefix-mask drills", category: "learning", keywords: "cidr practice quiz drill", recent: true },
+  { href: "/vlsm-practice", title: "VLSM Practice", desc: "Smallest-fit drills", category: "learning", keywords: "vlsm practice quiz drill", },
+  { href: "/wildcard-mask-practice", title: "Wildcard Mask Practice", desc: "Inverse-mask drills", category: "learning", keywords: "wildcard practice quiz drill", },
+  { href: "/port-number-quiz", title: "Port Number Quiz", desc: "Service-port drills", category: "learning", keywords: "port quiz service drill", },
+  // Phase 4: references
+  { href: "/osi-model-reference", title: "OSI Model Reference", desc: "7 layers, PDU, examples", category: "learning", keywords: "osi model layers reference", recent: true },
+  { href: "/tcp-ip-model-reference", title: "TCP/IP Model Reference", desc: "4 layers + OSI mapping", category: "learning", keywords: "tcp ip model layers reference", },
+  { href: "/tcp-flags-reference", title: "TCP Flags Reference", desc: "9 flags, when seen", category: "learning", keywords: "tcp flags syn ack reference", },
+  { href: "/dns-record-types-reference", title: "DNS Record Types Reference", desc: "A to CAA cheat sheet", category: "learning", keywords: "dns record types reference", },
+  { href: "/ipv4-address-classes-reference", title: "IPv4 Address Classes Reference", desc: "A-E + private ranges", category: "learning", keywords: "ipv4 classes reference", },
+  { href: "/ipv6-prefix-reference", title: "IPv6 Prefix Reference", desc: "Special prefixes cheat sheet", category: "learning", keywords: "ipv6 prefix reference", },
+  { href: "/http-status-codes-reference", title: "HTTP Status Codes Reference", desc: "All codes grouped", category: "learning", keywords: "http status codes reference list", },
+  { href: "/well-known-ports-reference", title: "Well-Known Ports Reference", desc: "Full common-ports table", category: "learning", keywords: "ports reference well-known list", },
+  { href: "/network-protocol-reference", title: "Network Protocol Reference", desc: "Protocols, ports, purpose", category: "learning", keywords: "protocol reference tcp udp ports", },
 ];
 
 export const CALCULATOR_HREFS = [

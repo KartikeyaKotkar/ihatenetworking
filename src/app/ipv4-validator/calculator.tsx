@@ -1,11 +1,11 @@
 'use client';
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { validateIPv4Detailed, ipv4ToString } from "@/lib/ipv4";
-import { CopyButton, ResultRow, inputCls, labelCls } from "@/components/tool-ui";
+import { CopyButton, ResultRow, inputCls, labelCls, usePersistentState } from "@/components/tool-ui";
 
 export default function Calculator() {
-  const [ip, setIp] = useState("192.168.1.256");
+  const [ip, setIp] = usePersistentState("validator:ip", "192.168.1.256");
   const result = useMemo(() => validateIPv4Detailed(ip), [ip]);
   const copyAll = result.valid
     ? `Valid: ${ip.trim()} (${result.value !== null ? ipv4ToString(result.value) : ""})`

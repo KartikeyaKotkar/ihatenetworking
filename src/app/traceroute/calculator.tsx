@@ -35,7 +35,7 @@ export default function Calculator() {
       <input className={inputCls} value={maxHops} onChange={(e) => setMaxHops(e.target.value)} placeholder="20" inputMode="numeric" />
       <p className="mt-2 text-xs text-gray-500">Traceroute can take up to ~45 seconds. Please wait for the full path.</p>
       <div className="mt-3 flex gap-2">
-        <button type="submit" disabled={loading} className="rounded-md bg-emerald-500 px-4 py-1.5 text-xs font-semibold text-black hover:bg-emerald-400 disabled:opacity-50">{loading ? "Tracing (up to ~45s)…" : "Trace route"}</button>
+        <button type="submit" disabled={loading} className="rounded-md bg-zinc-200 px-4 py-1.5 text-xs font-semibold text-black hover:bg-white disabled:opacity-50">{loading ? "Tracing (up to ~45s)…" : "Trace route"}</button>
         <CopyButton text={data ? data.raw : ""} />
         <button type="button" onClick={reset} className="rounded-md border border-[var(--panel-border)] px-3 py-1.5 text-xs text-gray-400 hover:text-white">Reset</button>
       </div>

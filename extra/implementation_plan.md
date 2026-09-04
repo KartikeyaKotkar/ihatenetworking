@@ -1,6 +1,6 @@
 # "Did You Ping It" — Implementation Plan (living doc)
 
-Last updated: 2026-09-04. Scope of this update: **Phase 3 COMPLETE. 70 tools live (60 + 10 Cisco/student).**
+Last updated: 2026-09-04. Scope of this update: **Phase 4 COMPLETE. 85 tools live. Game plan §§2-7 fully shipped.**
 
 ## Status
 
@@ -35,6 +35,26 @@ Last updated: 2026-09-04. Scope of this update: **Phase 3 COMPLETE. 70 tools liv
 - Pages: 5 + 5 via 2 parallel subagents. All client-side, educational explanations per game plan §6.
 - Homepage: Cisco section live (was "Soon"), blurb updated, counts 60 → 70. `recent` tail now shows Cisco tools.
 - Tests: `tests/phase3.test.ts` (5). `npm test` 51/51 green. Build clean, `/ospf-cost-calculator` + `#category-cisco` smoke-checked on dev.
+
+## Phase 4 — Practice & Learning (done, 15 tools)
+
+- Lib: `src/lib/learn.ts` (6 seeded question generators, 4 unique options each) + data exports (`allPorts`, `allStatuses`, `TCP_FLAG_MEANINGS`; repaired accidental `TCP_FLAGS` deletion same edit).
+- Pages: 6 quizzes (lazy-init state, Check/New/Reset, score, hint reveal) + 9 server-only references (sticky tables, overflow-x, copy summary), via 2 parallel subagents.
+- Homepage: new `learning` category; counts 70 → 85.
+- Tests: `tests/phase4.test.ts` (7: 6 gens × 50 seeds + fit check). `npm test` 58/58 green. Build clean, practice + OSI pages + `#category-learning` smoke-checked.
+
+## §8 SEO audit (2-investigator scout, fixes in main thread)
+
+## §9 UX rules (done)
+
+- Do: input-first layout, live `useMemo` results, `usePersistentState` (localStorage, SSR-safe effect hydration) wired into top-10 popular calculators, copy + reset everywhere, specific `ErrorBox` messages, explanations + examples + FAQs per page.
+- Don't: no signup, no gating, no popups, single-page tools, all-local processing except DNS/ping/traceroute/headers/geo/whois APIs.
+- Monochrome: bulk sweep removed all neon/emerald/cyan/amber classes (38 files) + dead CSS vars; hovers/focus/rings/badges/buttons all zinc. Only red remains for error states (`ErrorBox`, wrong quiz picks). ToolShell example bumped to `text-sm zinc-200` for readability.
+
+- Scouts found: 87 metadata exports full coverage, one H1 each, H1→H2→H3 clean, 0 broken related links (~256 edges). Gaps: no metadataBase/OG/robots, FAQ content without FAQPage schema, 8 orphans (0 inbound).
+- Fixes: `src/lib/site.ts` SITE_URL shared by layout/sitemap/robots; layout gains metadataBase + OG + twitter + robots; new `src/app/robots.ts` (allow all + sitemap); ToolShell emits FAQPage JSON-LD alongside WebApplication; 8 orphans each gained one inbound related link (hub pages now carry 4 links).
+- Verified: `/robots.txt` live, `/sitemap.xml` 86 URLs, 58/58 tests green.
+- Deferred: per-page canonical (needs path-aware metadata, 85 edits) + Search Console/Analytics (§11-12 launch items).
 
 ## Routes (Phase 1 Subnetting)
 

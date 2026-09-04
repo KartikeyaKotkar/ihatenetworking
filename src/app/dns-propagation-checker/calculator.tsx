@@ -37,7 +37,7 @@ export default function Calculator() {
       <label className={labelCls}>Hostname</label>
       <input className={inputCls} value={name} onChange={(e) => setName(e.target.value)} placeholder="example.com" autoComplete="off" spellCheck={false} />
       <div className="mt-3 flex gap-2">
-        <button type="submit" disabled={loading} className="rounded-md bg-emerald-500 px-4 py-1.5 text-xs font-semibold text-black hover:bg-emerald-400 disabled:opacity-50">{loading ? "Checking…" : "Check propagation"}</button>
+        <button type="submit" disabled={loading} className="rounded-md bg-zinc-200 px-4 py-1.5 text-xs font-semibold text-black hover:bg-white disabled:opacity-50">{loading ? "Checking…" : "Check propagation"}</button>
         <CopyButton text={data ? `${data.name} agreed=${data.agreed} ` + data.resolvers.map((r) => `${r.resolver}=${r.values ? r.values.join(",") : r.error ?? "error"} (${r.ms}ms)`).join(" ") : ""} />
         <button type="button" onClick={reset} className="rounded-md border border-[var(--panel-border)] px-3 py-1.5 text-xs text-gray-400 hover:text-white">Reset</button>
       </div>
@@ -46,7 +46,7 @@ export default function Calculator() {
         {data && (
           <div className="rounded-lg bg-black/40 p-4">
             <div className="mb-2">
-              <span className={`inline-block rounded px-2 py-0.5 font-mono text-xs font-semibold ${data.agreed ? "bg-emerald-500/20 text-emerald-300" : "bg-amber-500/20 text-amber-300"}`}>
+              <span className={`inline-block rounded px-2 py-0.5 font-mono text-xs font-semibold ${data.agreed ? "bg-zinc-200/20 text-zinc-200" : "bg-white/10 text-zinc-400"}`}>
                 {data.agreed ? "Agreed — propagated" : "Not yet — resolvers disagree"}
               </span>
             </div>

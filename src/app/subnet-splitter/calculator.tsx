@@ -1,13 +1,13 @@
 'use client';
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { parseIPv4, parsePrefix, splitSubnet } from "@/lib/ipv4";
-import { CopyButton, ErrorBox, inputCls, labelCls } from "@/components/tool-ui";
+import { CopyButton, ErrorBox, inputCls, labelCls, usePersistentState } from "@/components/tool-ui";
 
 export default function Calculator() {
-  const [net, setNet] = useState("192.168.1.0");
-  const [prefix, setPrefix] = useState("24");
-  const [next, setNext] = useState("26");
+  const [net, setNet] = usePersistentState("split:net", "192.168.1.0");
+  const [prefix, setPrefix] = usePersistentState("split:prefix", "24");
+  const [next, setNext] = usePersistentState("split:next", "26");
   const result = useMemo(() => {
     if (parseIPv4(net) === null) return { list: null, error: "Invalid network IP." };
     if (parsePrefix(prefix) === null || parsePrefix(next) === null) return { list: null, error: "Prefixes must be 0-32, new prefix ≥ current." };

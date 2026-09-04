@@ -1,11 +1,11 @@
 'use client';
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { parsePrefix, usableHostCount, totalAddresses } from "@/lib/ipv4";
-import { CopyButton, ErrorBox, ResultRow, inputCls, labelCls } from "@/components/tool-ui";
+import { CopyButton, ErrorBox, ResultRow, inputCls, labelCls, usePersistentState } from "@/components/tool-ui";
 
 export default function Calculator() {
-  const [prefix, setPrefix] = useState("24");
+  const [prefix, setPrefix] = usePersistentState("hosts:prefix", "24");
   const r = useMemo(() => {
     const p = parsePrefix(prefix);
     if (prefix.trim() === "") return { p: null, error: "" };

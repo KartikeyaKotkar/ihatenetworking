@@ -26,7 +26,7 @@ export default function Calculator() {
       <div className="mt-4"><ErrorBox message={r.error} />
         {r.out && <div className="rounded-lg bg-black/40 p-4">
           <ResultRow label="Type" value={r.out.label} />
-          <pre className="mt-2 overflow-x-auto font-mono text-sm text-emerald-300">{r.out.config}</pre>
+          <pre className="mt-2 overflow-x-auto font-mono text-sm text-zinc-200">{r.out.config}</pre>
         </div>}
       </div>
     </div>

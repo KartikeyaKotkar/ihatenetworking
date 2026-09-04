@@ -1,12 +1,12 @@
 'use client';
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { describeSubnet, parseIPv4, parsePrefix } from "@/lib/ipv4";
-import { CopyButton, ErrorBox, ResultRow, inputCls, labelCls } from "@/components/tool-ui";
+import { CopyButton, ErrorBox, ResultRow, inputCls, labelCls, usePersistentState } from "@/components/tool-ui";
 
 export default function Calculator() {
-  const [ip, setIp] = useState("192.168.1.50");
-  const [prefix, setPrefix] = useState("24");
+  const [ip, setIp] = usePersistentState("range:ip", "192.168.1.50");
+  const [prefix, setPrefix] = usePersistentState("range:prefix", "24");
   const r = useMemo(() => {
     if (parseIPv4(ip) === null) return { info: null, error: "Invalid IP." };
     if (parsePrefix(prefix) === null) return { info: null, error: "Invalid prefix 0-32." };

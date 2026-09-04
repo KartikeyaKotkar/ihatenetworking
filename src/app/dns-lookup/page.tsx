@@ -23,6 +23,7 @@ export default function Page() {
         { href: "/a-record-lookup", label: "A Record Lookup" },
         { href: "/mx-record-lookup", label: "MX Record Lookup" },
         { href: "/reverse-dns-lookup", label: "Reverse DNS Lookup" },
+        { href: "/dns-record-types-reference", label: "DNS Record Types" },
       ]}
     >
       <Calculator />

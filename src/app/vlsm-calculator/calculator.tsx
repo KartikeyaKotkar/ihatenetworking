@@ -1,13 +1,13 @@
 'use client';
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { parseIPv4, parsePrefix, vlsmAllocate } from "@/lib/ipv4";
-import { CopyButton, ErrorBox, inputCls, labelCls } from "@/components/tool-ui";
+import { CopyButton, ErrorBox, inputCls, labelCls, usePersistentState } from "@/components/tool-ui";
 
 export default function Calculator() {
-  const [base, setBase] = useState("192.168.1.0");
-  const [prefix, setPrefix] = useState("24");
-  const [hosts, setHosts] = useState("100, 50, 10");
+  const [base, setBase] = usePersistentState("vlsm:base", "192.168.1.0");
+  const [prefix, setPrefix] = usePersistentState("vlsm:prefix", "24");
+  const [hosts, setHosts] = usePersistentState("vlsm:hosts", "100, 50, 10");
   const result = useMemo(() => {
     if (parseIPv4(base) === null) return { blocks: null, error: "Invalid base network IP." };
     if (parsePrefix(prefix) === null) return { blocks: null, error: "Invalid base prefix 0-32." };

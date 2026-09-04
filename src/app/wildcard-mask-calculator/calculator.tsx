@@ -1,11 +1,11 @@
 'use client';
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { parsePrefix, prefixToMaskString, prefixToWildcardString, maskStringToPrefix } from "@/lib/ipv4";
-import { CopyButton, ErrorBox, ResultRow, inputCls, labelCls } from "@/components/tool-ui";
+import { CopyButton, ErrorBox, ResultRow, inputCls, labelCls, usePersistentState } from "@/components/tool-ui";
 
 export default function Calculator() {
-  const [val, setVal] = useState("24");
+  const [val, setVal] = usePersistentState("wild:val", "24");
   const r = useMemo(() => {
     if (val.trim() === "") return { out: null, error: "" };
     let p = parsePrefix(val);

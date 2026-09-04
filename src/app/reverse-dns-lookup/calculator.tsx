@@ -31,7 +31,7 @@ export default function Calculator() {
       <input className={inputCls} value={ip} onChange={(e) => setIp(e.target.value)} placeholder="8.8.8.8" autoComplete="off" spellCheck={false} />
       <p className="mt-2 text-xs text-gray-500">No PTR record (404) is normal — many IPs simply have none.</p>
       <div className="mt-3 flex gap-2">
-        <button type="submit" disabled={loading} className="rounded-md bg-emerald-500 px-4 py-1.5 text-xs font-semibold text-black hover:bg-emerald-400 disabled:opacity-50">{loading ? "Looking up…" : "Reverse lookup"}</button>
+        <button type="submit" disabled={loading} className="rounded-md bg-zinc-200 px-4 py-1.5 text-xs font-semibold text-black hover:bg-white disabled:opacity-50">{loading ? "Looking up…" : "Reverse lookup"}</button>
         <CopyButton text={hostnames ? hostnames.join("\n") : ""} />
         <button type="button" onClick={reset} className="rounded-md border border-[var(--panel-border)] px-3 py-1.5 text-xs text-gray-400 hover:text-white">Reset</button>
       </div>
@@ -43,7 +43,7 @@ export default function Calculator() {
             <div className="mt-2">
               <p className="text-xs text-gray-400">Hostnames ({hostnames.length})</p>
               <ul className="mt-1 space-y-1">
-                {hostnames.map((h) => <li key={h} className="break-all rounded bg-white/5 px-2 py-1 font-mono text-xs text-emerald-200">{h}</li>)}
+                {hostnames.map((h) => <li key={h} className="break-all rounded bg-white/5 px-2 py-1 font-mono text-xs text-zinc-200">{h}</li>)}
               </ul>
             </div>
           </div>

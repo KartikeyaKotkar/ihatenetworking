@@ -18,7 +18,7 @@ export default function Page() {
         { q: "What is a classful default mask?", a: "The mask implied by class alone: A=/8, B=/16, C=/24. Modern routing uses CIDR instead." },
         { q: "Why N/A for Class D/E?", a: "Class D is multicast and Class E is experimental, so neither has a classful host mask." },
       ]}
-      related={[{ href: "/cisco-subnet-calculator", label: "Cisco Subnet Calculator" }, { href: "/ipv4-validator", label: "IPv4 Validator" }, { href: "/private-ip-checker", label: "Private IP Checker" }]}
+      related={[{ href: "/cisco-subnet-calculator", label: "Cisco Subnet Calculator" }, { href: "/ipv4-validator", label: "IPv4 Validator" }, { href: "/private-ip-checker", label: "Private IP Checker" }, { href: "/ipv4-address-classes-reference", label: "IPv4 Classes Reference" }]}
     >
       <Calculator />
     </ToolShell>

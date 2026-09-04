@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { SITE_URL } from "@/lib/site";
 
 const TOOLS = [
   "/subnet-calculator",
@@ -71,10 +72,25 @@ const TOOLS = [
   "/ospf-cost-calculator",
   "/eigrp-metric-calculator",
   "/stp-root-bridge-calculator",
+  "/subnetting-practice",
+  "/ip-address-quiz",
+  "/cidr-practice",
+  "/vlsm-practice",
+  "/wildcard-mask-practice",
+  "/port-number-quiz",
+  "/osi-model-reference",
+  "/tcp-ip-model-reference",
+  "/tcp-flags-reference",
+  "/dns-record-types-reference",
+  "/ipv4-address-classes-reference",
+  "/ipv6-prefix-reference",
+  "/http-status-codes-reference",
+  "/well-known-ports-reference",
+  "/network-protocol-reference",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = "https://didyoupingit.com";
+  const base = SITE_URL;
   return [
     { url: base, lastModified: new Date(), changeFrequency: "weekly", priority: 1 },
     ...TOOLS.map((p) => ({

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { SITE_URL } from "@/lib/site";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,12 +14,29 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "did you ping it — Free Subnetting & Networking Tools",
+    default: "did you ping it — Free Subnetting, DNS & Networking Tools",
     template: "%s | did you ping it",
   },
   description:
-    "Free, fast, privacy-first subnetting calculators. Subnet, CIDR, VLSM, splitter, masks, ranges. 100% client-side, no signup.",
+    "Free, fast, privacy-first networking tools: subnet calculators, DNS lookups, ping, headers, packet decoders, Cisco, quizzes. No signup.",
+  openGraph: {
+    type: "website",
+    siteName: "did you ping it",
+    title: "did you ping it — Free Subnetting, DNS & Networking Tools",
+    description:
+      "Small networking tasks, solved instantly. 85 free tools, no signup, privacy-first.",
+  },
+  twitter: {
+    card: "summary",
+    title: "did you ping it — Free Networking Tools",
+    description: "Small networking tasks, solved instantly. 85 free tools.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
