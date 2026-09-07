@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { CATEGORIES, TOOLS, categoryLabel, toolsByCategory } from "@/lib/tools";
 
 export const metadata: Metadata = {
-  title: "did you ping it — Free Subnetting, DNS & Networking Tools",
+  title: "did you ping it? — Free Subnetting, DNS & Networking Tools",
   description:
     "Free, fast, privacy-first networking tools: subnet calculators, DNS lookups, ping, headers, URL utils, base converters. No signup.",
 };
@@ -55,6 +55,22 @@ export default function Home() {
               <Link href={t.href}>{t.title}</Link>
             </Button>
           ))}
+        </div>
+        <Card className="w-full max-w-2xl text-left">
+          <CardContent className="flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-sm font-semibold text-white">Having a problem?</p>
+              <p className="mt-1 text-xs text-gray-400">Walk DNS → ping → TCP → HTTP → TLS step by step.</p>
+            </div>
+            <Button asChild className="shrink-0">
+              <Link href="/troubleshoot">Troubleshoot a network problem</Link>
+            </Button>
+          </CardContent>
+        </Card>
+        <div className="flex w-full max-w-2xl justify-center gap-6 text-xs text-gray-500">
+          <span>I know what tool I need → search or browse below</span>
+          <span className="hidden sm:inline">·</span>
+          <span>I know what&apos;s broken → troubleshoot</span>
         </div>
       </header>
 
@@ -153,7 +169,7 @@ export default function Home() {
       </div>
 
       <footer className="mt-14 text-center text-xs text-gray-600">
-        <p>Phase 1 MVP + Phase 2 + Phase 3 + Phase 4 complete: 85 tools live. No account, no tracking inputs.</p>
+        <p>85 tools + troubleshooting workflows. No account, no tracking inputs.</p>
       </footer>
     </div>
   );

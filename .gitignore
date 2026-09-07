@@ -41,5 +41,5 @@ yarn-error.log*
 next-env.d.ts
 .claude/skills/integration-nextjs-app-router/
 .next/
-extra/
 node_modules/
+extra/

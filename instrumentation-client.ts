@@ -16,8 +16,13 @@ if (!projectToken) {
     );
   }
 } else {
+  // Use local proxy (/ingest) to avoid adblockers / CORS blocking direct us.i.posthog.com.
+  // NEXT_PUBLIC_POSTHOG_HOST is kept as https://us.i.posthog.com for ui_host / reference,
+  // but api traffic goes via same-origin rewrites in next.config.ts.
+  const isPosthogHost = /posthog\.com/i.test(apiHost);
   posthog.init(projectToken, {
-    api_host: apiHost,
+    api_host: isPosthogHost ? "/ingest" : apiHost,
+    ui_host: isPosthogHost ? "https://us.posthog.com" : undefined,
     defaults: "2026-01-30",
     capture_exceptions: true,
     debug: process.env.NODE_ENV === "development",

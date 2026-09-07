@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site";
 
+const EXTRA = ["/troubleshoot", "/troubleshoot/unreachable"];
+
 const TOOLS = [
   "/subnet-calculator",
   "/cidr-calculator",
@@ -93,6 +95,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const base = SITE_URL;
   return [
     { url: base, lastModified: new Date(), changeFrequency: "weekly", priority: 1 },
+    ...EXTRA.map((p) => ({
+      url: base + p,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.9,
+    })),
     ...TOOLS.map((p) => ({
       url: base + p,
       lastModified: new Date(),
