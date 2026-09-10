@@ -2,7 +2,7 @@
 
 export function parseHexBytes(input: string): number[] | null {
   if (typeof input !== "string") return null;
-  let s = input.trim().toLowerCase().replace(/^0x/, "").replace(/[\s:_\-]/g, "");
+  const s = input.trim().toLowerCase().replace(/^0x/, "").replace(/[\s:_\-]/g, "");
   if (s.length === 0 || s.length % 2 !== 0) return null;
   if (!/^[0-9a-f]+$/.test(s)) return null;
   const out: number[] = [];

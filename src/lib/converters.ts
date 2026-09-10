@@ -12,7 +12,7 @@ function stripPrefix(s: string, prefixes: string[]): string {
 }
 
 export function hexToBin(hex: string): string | null {
-  let s = stripPrefix(clean(hex), ["0x"]);
+  const s = stripPrefix(clean(hex), ["0x"]);
   if (!/^[0-9a-fA-F]+$/.test(s)) return null;
   let out = "";
   for (const c of s) out += parseInt(c, 16).toString(2).padStart(4, "0");
@@ -42,7 +42,7 @@ export function decToBin(dec: string): string | null {
 }
 
 export function binToDec(bin: string): string | null {
-  let s = stripPrefix(clean(bin), ["0b"]);
+  const s = stripPrefix(clean(bin), ["0b"]);
   if (!/^[01]+$/.test(s)) return null;
   try {
     return BigInt("0b" + s).toString(10);
@@ -52,7 +52,7 @@ export function binToDec(bin: string): string | null {
 }
 
 export function hexToDec(hex: string): string | null {
-  let s = stripPrefix(clean(hex), ["0x"]);
+  const s = stripPrefix(clean(hex), ["0x"]);
   if (!/^[0-9a-fA-F]+$/.test(s)) return null;
   try {
     return BigInt("0x" + s).toString(10);

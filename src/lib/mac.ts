@@ -13,7 +13,7 @@ export interface MacInfo {
 
 export function parseMac(input: string): number[] | null {
   if (typeof input !== "string") return null;
-  let s = input.trim().toLowerCase().replace(/^0x/, "");
+  const s = input.trim().toLowerCase().replace(/^0x/, "");
   let hex: string;
   if (s.includes(".")) {
     // Cisco dotted: xxxx.xxxx.xxxx
