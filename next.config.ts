@@ -8,7 +8,19 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: ["192.168.1.158"],
 
   async rewrites() {
+    const go = process.env.GO_API_URL?.replace(/\/$/, "");
+    const apiRewrites = go
+      ? [
+          { source: "/api/dns", destination: `${go}/api/dns` },
+          { source: "/api/dns/:path*", destination: `${go}/api/dns/:path*` },
+          { source: "/api/ping", destination: `${go}/api/ping` },
+          { source: "/api/tcp", destination: `${go}/api/tcp` },
+          { source: "/api/headers", destination: `${go}/api/headers` },
+          { source: "/api/traceroute", destination: `${go}/api/traceroute` },
+        ]
+      : [];
     return [
+      ...apiRewrites,
       {
         source: "/ingest/static/:path*",
         destination: "https://us.i.posthog.com/static/:path*",

@@ -1,17 +1,37 @@
 # Self-host stack. No DB. Vercel unaffected (ignores this file).
+# Hybrid: app (Next.js UI) + go-api (live checks). If GO_API_URL unset,
+# Next.js serves APIs itself. If set, rewrites proxy to go-api.
 services:
+  go-api:
+    build:
+      context: ./go-api
+      dockerfile: Dockerfile
+    expose:
+      - "8080"
+    environment:
+      - PORT=8080
+    cap_add:
+      - NET_RAW
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/health"]
+      interval: 15s
+      timeout: 3s
+      retries: 3
+
   app:
     build: .
+    depends_on:
+      go-api:
+        condition: service_healthy
     ports:
       - "${PORT:-3000}:3000"
-    # Real ICMP needs raw sockets. Without, /api/ping uses TCP
-    # fallback automatically. Harmless to keep.
     cap_add:
       - NET_RAW
     environment:
       - PORT=3000
       - HOSTNAME=0.0.0.0
-      # Optional. Empty = analytics off, app still runs.
+      - GO_API_URL=http://go-api:8080
       - NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN=${NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN:-}
       - NEXT_PUBLIC_POSTHOG_HOST=${NEXT_PUBLIC_POSTHOG_HOST:-}
     restart: unless-stopped
