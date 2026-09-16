@@ -1,0 +1,17 @@
+# Self-host stack. No DB. Vercel unaffected (ignores this file).
+services:
+  app:
+    build: .
+    ports:
+      - "${PORT:-3000}:3000"
+    # Real ICMP needs raw sockets. Without, /api/ping uses TCP
+    # fallback automatically. Harmless to keep.
+    cap_add:
+      - NET_RAW
+    environment:
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+      # Optional. Empty = analytics off, app still runs.
+      - NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN=${NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN:-}
+      - NEXT_PUBLIC_POSTHOG_HOST=${NEXT_PUBLIC_POSTHOG_HOST:-}
+    restart: unless-stopped
